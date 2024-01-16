@@ -1,3 +1,4 @@
+
 {
 	"name": "timekeeper",
 	"version": "0.0.1",
@@ -13,6 +14,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.0",
+		"@sveltejs/adapter-node": "^3.0.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.1",
 		"@types/eslint": "8.56.0",
