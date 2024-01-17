@@ -3,7 +3,7 @@
 </script>
 
 <body data-theme="dark" class="h-screen justify-center">
-    <Nav pageName="Current Race"/>
+    <Nav pageName="Create Race"/>
     <div class="w-full h-96 p-3 mt-[75px]">
         <div class="text-center h-10 rounded-lg">
             <p>Coming Soon!</p>

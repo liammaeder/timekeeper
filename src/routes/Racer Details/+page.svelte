@@ -1,10 +1,10 @@
 <script>
-    import Nav from '$lib/Nav.svelte';
+    import Nav from '$lib/navbar.svelte';
 </script>
 
 <body data-theme="dark" class="h-screen justify-center">
     <Nav pageName="Racer Details"/>
-    <div class="w-full h-96 py-3 px-5">
+    <div class="w-full h-96 p-3 mt-[75px]">
         <div class="text-center h-10 rounded-lg">
             <p>Coming Soon!</p>
         </div>
