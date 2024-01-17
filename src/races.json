@@ -1,0 +1,206 @@
+[
+    {
+        "id": 1,
+        "status": "complete",
+        "name": "Splash & Dash",
+        "date": "11-01-2024",
+        "participants": [
+            {
+                "id": 1,
+                "type": "k2",
+                "time": "00:45:02",
+                "racers": [
+                    {
+                        "id": 1,
+                        "name": "John Doe"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Jane Doe"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "type": "k1",
+                "time": "00:52:32",
+                "racers": [
+                    {
+                        "id": 3,
+                        "name": "Max Henry"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "status": "complete",
+        "name": "SSS",
+        "date": "11-01-2024",
+        "participants":[
+            {
+                "id": 1,
+                "type": "k2",
+                "time": "01:16:10",
+                "racers": [
+                    {
+                        "id": 1,
+                        "name": "Sam Smith"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Katie Jane"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "type": "k1",
+                "time": "01:02:32",
+                "racers": [
+                    {
+                        "id": 3,
+                        "name": "Mark Paul"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "status": "complete",
+        "name": "Splash & Dash",
+        "date": "04-01-2024",
+        "participants": [
+            {
+                "id": 1,
+                "type": "k2",
+                "time": "00:48:02",
+                "racers": [
+                    {
+                        "id": 1,
+                        "name": "John Doe"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Jane Doe"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "type": "k1",
+                "time": "00:51:05",
+                "racers": [
+                    {
+                        "id": 3,
+                        "name": "Max Henry"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "status": "complete",
+        "name": "SSS",
+        "date": "04-01-2024",
+        "participants": [
+            {
+                "id": 1,
+                "type": "k2",
+                "time": "00:56:02",
+                "racers": [
+                    {
+                        "id": 1,
+                        "name": "Sam Smith"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Katie Jane"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "type": "k1",
+                "time": "01:03:05",
+                "racers": [
+                    {
+                        "id": 3,
+                        "name": "Mark Paul"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "status": "future",
+        "name": "SSS (future)",
+        "date": "25-01-2024",
+        "participants": [
+            {
+                "id": 1,
+                "type": "k2",
+                "time": "00:56:02",
+                "racers": [
+                    {
+                        "id": 1,
+                        "name": "James Ryan"
+                    },
+                    {
+                        "id": 2,
+                        "name": "James Bond"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "type": "k1",
+                "time": "00:58:45",
+                "racers": [
+                    {
+                        "id": 3,
+                        "name": "Shelley Robertson"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "status": "in-progress",
+        "name": "SSS (in-progress)",
+        "date": "20-01-2024",
+        "participants": [
+            {
+                "id": 1,
+                "type": "k2",
+                "time": "00:56:02",
+                "racers": [
+                    {
+                        "id": 1,
+                        "name": "Sam Smith"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Katie Jane"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "type": "k1",
+                "time": "01:03:05",
+                "racers": [
+                    {
+                        "id": 3,
+                        "name": "Mark Paul"
+                    }
+                ]
+            }
+        ]
+    }
+]
