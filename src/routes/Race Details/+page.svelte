@@ -183,7 +183,8 @@
                         },
                     ]
                 }
-            ]}
+            ]
+        }
     ];
 
     let raceDetails = races[id];
