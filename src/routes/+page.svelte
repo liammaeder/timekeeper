@@ -2,6 +2,8 @@
     import Nav from '$lib/navbar.svelte';
     import races from '../races.json';
 
+    console.log(races);
+
     let currentRaces = []
 
     races.forEach(function (race) {
