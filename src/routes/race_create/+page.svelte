@@ -2,10 +2,10 @@
     import Nav from '$lib/navbar.svelte';
 </script>
 
-<body data-theme="dark" class="h-screen justify-center">
-    <Nav pageName="Racer Details"/>
-    <div class="w-full h-96 p-3 mt-[75px]">
-        <div class="text-center h-10 rounded-lg">
+<body data-theme="aqua" class="h-screen justify-center">
+    <Nav pageName="Create Race"/>
+    <div class="w-full h-96 p-3 mt-[60px]">
+        <div class="text-center mt-3 h-10 rounded-lg">
             <p>Coming Soon!</p>
         </div>
         <div class="flex flex-col gap-4 mx-auto mt- w-80 h-auto">

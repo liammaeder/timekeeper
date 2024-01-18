@@ -19,7 +19,7 @@
     }
 </style>
 
-<div class="navbar bg-primary text-neutral-950">
+<div class="navbar bg-primary text-neutral-950 px-4">
     <div class="flex-1">
         <a class="text-xl font-bold" href="/">Time Keeper</a>
     </div>
@@ -30,10 +30,8 @@
                     <summary>
                         <span class="font-bold">Navigate</span>
                     </summary>
-                    <ul class="p-2 bg-primary rounded-t-none shadow-lg shadow-primary-content w-auto font-bold">
-                        <li><a href="/">Dashboard</a></li>
-                        <li><a href="/Racer Details">Current Race</a></li>
-                        <li><a href="/Settings">Settings</a></li>
+                    <ul class="p-2 bg-primary rounded-t-none shadow-lg shadow-primary-content w-full font-bold">
+                        <li><a href="/settings">Settings</a></li>
                     </ul>
                 </details>
             </li>
