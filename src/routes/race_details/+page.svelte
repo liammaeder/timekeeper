@@ -1,15 +1,15 @@
 <script>
     import Nav              from '$lib/navbar.svelte';
-    import races            from '../../races.json';
+    import races            from '../../json/races.json';
     import UrlController    from '$lib/Url.js';
-import { browser }          from '$app/environment';
+    import { browser }      from '$app/environment';
+    import {theme}          from "$lib/store.js";
 
     let id = 1;
     let raceDetails;
     let loadTest = false;
 
     if (browser) {
-        console.log("browser true")
         let urlString = window.location.href;
         const urlParams = new UrlController(urlString).getUrlParameters();
         if (!urlParams) {
@@ -28,7 +28,7 @@ import { browser }          from '$app/environment';
 
 </script>
 
-<body data-theme="aqua" class="h-screen justify-center">
+<div data-theme="{$theme}" class="h-screen justify-center">
     <Nav pageName="Race"/>
     <div class="w-full h-fit p-3 mt-[60px]">
         {#if loadTest}
@@ -73,4 +73,4 @@ import { browser }          from '$app/environment';
             </div>
         {/if}
     </div>
-</body>
+</div>

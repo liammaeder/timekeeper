@@ -1,42 +1,14 @@
 /** @type {import('tailwindcss').Config} */
+require('dotenv').config()
+
+// let themeList = process.env.VITE_THEME_LIST.replace("[", "").replace("]", "").split(',');
+let themeList = process.env.VITE_THEME_LIST.split(',');
+
 export default {
   content: ['./src/**/*.{html,svelte,js,ts,css}'],
   plugins: [require('daisyui')],
   daisyui: {
-      themes: [
-        "light",
-        "dark",
-        "cupcake",
-        "bumblebee",
-        "emerald",
-        "corporate",
-        "synthwave",
-        "retro",
-        "cyberpunk",
-        "valentine",
-        "halloween",
-        "garden",
-        "forest",
-        "aqua",
-        "lofi",
-        "pastel",
-        "fantasy",
-        "wireframe",
-        "black",
-        "luxury",
-        "dracula",
-        "cmyk",
-        "autumn",
-        "business",
-        "acid",
-        "lemonade",
-        "night",
-        "coffee",
-        "winter",
-        "dim",
-        "nord",
-        "sunset",
-      ],
+      themes: themeList,
   }
 }
 
