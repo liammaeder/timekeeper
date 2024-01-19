@@ -4,7 +4,7 @@
 </script>
 
 <div data-theme="{$theme}" class="h-screen justify-center">
-    <Nav pageName="Current Race"/>
+    <Nav pageName="Racer Details"/>
     <div class="w-full h-96 p-3 mt-[60px]">
         <div class="text-center mt-3 h-10 rounded-lg">
             <p>Coming Soon!</p>
