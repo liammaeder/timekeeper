@@ -1,7 +1,7 @@
 <script>
-    import Nav from '$lib/navbar.svelte';
-    import {theme} from "$lib/store.js";
-    import ThemeSwitcher from "$lib/ThemeSwitcher.svelte";
+    import Nav from '$lib/components/navbar.svelte';
+    import {theme} from "$lib/stores/store.js";
+    import ThemeSwitcher from "$lib/components/ThemeSwitcher.svelte";
 </script>
 <style>
 

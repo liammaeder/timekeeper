@@ -1,12 +1,12 @@
 <script>
-    import Nav from '$lib/navbar.svelte';
+    import Nav from '$lib/components/navbar.svelte';
     import races from '$lib/json/races.json';
-    import {theme} from "$lib/store.js";
+    import {theme} from "$lib/stores/store.js";
 
     let currentRaces = []
 
     races.forEach(function (race) {
-        if (race.status === "in-progress" || race.status === "future") {
+        if (race.status === "starte" || race.status === "future") {
             currentRaces.push(race);
         }
     })
@@ -16,14 +16,14 @@
 <div data-theme="{$theme}" class="h-dvh">
     <Nav />
 
-    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 w-full h-fit p-3 mt-[60px] gap-4">
+    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 w-full h-fit p-3 mt-[60px] gap-4 dark:text-white light:text-black">
         <div class="card mt-2 mx-auto h-fit w-full bg-primary-content/100">
             <div class="card-body">
                 <h2 class="card-title">Active Races</h2>
                 {#if currentRaces.length > 0}
                     <ul class="px-1">
                         {#each currentRaces as race (race.id)}
-                            {#if race.status === "in-progress"}
+                            {#if race.status === "starte"}
                                 <li class="grid grid-cols-3 my-3">
                                     <div class="text-success col-span-2 truncate">{race.name} - {race.date}</div>
                                     <div class="text-right">
@@ -72,7 +72,7 @@
                 <div class="overflow-x-auto">
                     <table class="table">
                         <thead>
-                        <tr>
+                        <tr class="dark:text-white light:text-black">
                             <th></th>
                             <th>Race</th>
                             <th>Date</th>

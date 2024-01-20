@@ -1,9 +1,9 @@
 <script>
-    import Nav              from '$lib/navbar.svelte';
+    import Nav              from '$lib/components/navbar.svelte';
     import Race             from '$lib/class/race/Race.js';
-    import UrlController    from '$lib/Url.js';
+    import UrlController    from '$lib/class/Url.js';
     import { browser }      from '$app/environment';
-    import { theme }        from "$lib/store.js";
+    import { theme }        from "$lib/stores/store.js";
 
     let id = -1;
     let raceDetails;
@@ -35,22 +35,22 @@
     raceState = raceDetails.status;
 </script>
 
-<div data-theme="{$theme}" class="h-screen justify-center">
+<div data-theme="{$theme}" class="h-screen justify-center text-primarynpm ">
     <Nav pageName="Race"/>
     <div class="w-full h-fit p-3 mt-[60px]">
         {#if dataLoaded}
-            <div class="text-center text-primary">
+            <div class="text-center">
                 No race information available...
             </div>
         {:else}
             {#if raceState === "complete"}
-                <div class="rounded-box bg-primary-content text-center text-primary my-2 p-2">
+                <div class="rounded-box bg-primary-content text-center my-2 p-2 text-primary">
                     <p>Race - {raceDetails.name}: {raceDetails.date}</p>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="table">
                         <thead>
-                        <tr>
+                        <tr class="text-primary">
                             <th></th>
                             <th>Boat Type</th>
                             <th>Racers</th>
@@ -84,29 +84,61 @@
                     <p>Race - {raceDetails.name}: {raceDetails.date}</p>
                 </div>
                 <div class="w-full h-fit mt-2 mb-3">
-                    <button class="btn btn-success w-full">
+                    <button class="btn btn-sm btn-success w-full">
                         Start All
                     </button>
                 </div>
                 <div class="mx-1">
-                    <!--{#each raceDetails.participants as participant}-->
-                        <div class="bg-primary-content rounded-box col-span-1 mb-3 p-0 grid grid-cols-5">
-                            <div class="text-left col-span-1">
-                                <button class="btn h-full w-full px-1 btn-circle btn-success">Start</button>
+                    {#each raceDetails.participants as participant}
+                        <div class="dropdown bg-primary-content rounded-lg col-span-1 mb-3">
+                            <div class="p-0 grid grid-cols-5 h-fit">
+                                <div class="text-left col-span-1">
+                                    <button class="btn btn-sm h-fit w-full btn-rounded btn-success">Start</button>
+                                </div>
+                                <div class="text-center h-fit col-span-3 px-2">
+                                    <div role="button" class="text-center w-full my-auto truncate">
+                                        {#each participant.racers as racer, i}
+                                            <span class="font-bold">{racer.name}</span>{#if i !== participant.racers.length-1}&nbsp;&&nbsp;{/if}
+                                        {/each}
+                                    </div>
+                                </div>
+                                <div class="text-left col-span-1">
+                                    <button class="btn btn-sm h-fit w-full btn-rounded bg-error text-primary-content">Stop</button>
+                                </div>
+                                <div class="dropdown-content grid col-span-5 grid-cols-2 h-fit">
+                                    <div class="text-left">
+                                        <button class="btn btn-sm h-full w-full btn-info">Edit</button>
+                                    </div>
+                                    <div class="text-right">
+                                        <button class="btn btn-sm h-full w-full btn-error">Delete</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="text-center h-full col-span-4">
-                                <div class="text-center w-full my-auto">K2 - John Doe & Jane Doe</div>
-                            </div>
+<!--                            <div class="p-0 grid grid-cols-5 h-fit">-->
+<!--                                <div class="text-left col-span-1">-->
+<!--                                    <button class="btn btn-sm h-fit w-full btn-rounded btn-success">Start</button>-->
+<!--                                </div>-->
+<!--                                <div class="dropdown text-center h-fit col-span-3 px-2">-->
+<!--                                    <div role="button" class="text-center w-full my-auto truncate">-->
+<!--                                        {#each participant.racers as racer, i}-->
+<!--                                            <span class="font-bold">{racer.name}</span>{#if i !== participant.racers.length-1}&nbsp;&&nbsp;{/if}-->
+<!--                                        {/each}-->
+<!--                                    </div>-->
+<!--                                    <div class="dropdown-content grid col-span-5 grid-cols-2 h-fit">-->
+<!--                                        <div class="text-left">-->
+<!--                                            <button class="btn btn-sm h-full w-full btn-info">Edit</button>-->
+<!--                                        </div>-->
+<!--                                        <div class="text-right">-->
+<!--                                            <button class="btn btn-sm h-full w-full btn-error">Delete</button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="text-left col-span-1">-->
+<!--                                    <button class="btn btn-sm h-fit w-full btn-rounded bg-error text-primary-content">Stop</button>-->
+<!--                                </div>-->
+<!--                            </div>-->
                         </div>
-                        <div class="bg-primary-content rounded-box col-span-1 mb-3 p-0 grid grid-cols-5">
-                            <div class="text-left col-span-1">
-                                <button class="btn h-full w-full px-1 btn-circle btn-success">Start</button>
-                            </div>
-                            <div class="text-center h-full col-span-4">
-                                <div class="text-center w-full my-auto">K1 - Mark Bondie</div>
-                            </div>
-                        </div>
-                    <!--{/each}-->
+                    {/each}
                 </div>
             {/if}
         {/if}

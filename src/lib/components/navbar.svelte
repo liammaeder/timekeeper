@@ -19,7 +19,7 @@
     }
 </style>
 
-<div class="navbar bg-primary text-neutral-950 px-4">
+<div class="navbar bg-primary text-primary-content px-4">
     <div class="flex-1">
         <a class="text-xl font-bold" href="/">Time Keeper</a>
     </div>
@@ -30,7 +30,7 @@
                     <summary>
                         <span class="font-bold">Navigate</span>
                     </summary>
-                    <ul class="p-2 bg-primary rounded-t-none shadow-lg shadow-primary-content w-full font-bold">
+                    <ul class="p-2 bg-primary rounded-t-none w-full font-bold">
                         <li><a href="/settings">Settings</a></li>
                     </ul>
                 </details>

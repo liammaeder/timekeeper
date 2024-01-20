@@ -1,6 +1,6 @@
 <script>
-    import Nav from '$lib/navbar.svelte';
-    import {theme} from "$lib/store.js";
+    import Nav from '$lib/components/navbar.svelte';
+    import {theme} from "$lib/stores/store.js";
 </script>
 
 <div data-theme="{$theme}" class="h-screen justify-center">

@@ -1,6 +1,6 @@
 <script>
     const themeList = import.meta.env.VITE_THEME_LIST.split(",");
-    import { theme } from "$lib/store";
+    import { theme } from "$lib/stores/store.js";
 
     function capitaliseFirst(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);

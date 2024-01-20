@@ -1,5 +1,5 @@
 import racesData from '$lib/json/races.json';
-import racersData from '$lib/json/racers.json';
+import Participants from "$lib/class/participants/Participants.js";
 
 class Race{
     constructor() {
@@ -18,26 +18,9 @@ class Race{
                 data.status = value.status;
                 data.name = value.name;
                 data.date = value.date;
-                data.participants = [];
 
-                Object.entries(value.participants).forEach(([index, participant]) => {
-                    let newParticipant = {};
-                    newParticipant.id = participant.id;
-                    newParticipant.type = participant.type;
-                    newParticipant.time = participant.time;
-                    newParticipant.racers = [];
-
-                    participant.racers.forEach((racerId, index) => {
-                        let newRacer = {
-                            "id": racersData[index].id,
-                            "name": racersData[index].name
-                        }
-
-                        newParticipant.racers.push(newRacer);
-                    });
-
-                    data.participants.push(newParticipant);
-                });
+                let Participant = new Participants();
+                data.participants = Participant.getParticipantsWithRacers(value.participants);
             }
         });
 
