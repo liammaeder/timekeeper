@@ -1,8 +1,23 @@
-import racesData from '$lib/json/races.json';
+import racesData    from '$lib/json/races.json';
 import Participants from "$lib/class/participants/Participants.js";
+const apiUrl        = import.meta.env.VITE_API_URL;
+const apiRoute      = apiUrl + 'races/';
 
 class Race{
     constructor() {
+    }
+
+    async connectToApi(route) {
+        let url = apiRoute + route;
+
+        try {
+            await fetch(url)
+                .then((res) => res.json())
+                .then((data) => console.log(data))
+                .catch((err) => console.warn(err));
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     getRaceWithRacers(raceId) {

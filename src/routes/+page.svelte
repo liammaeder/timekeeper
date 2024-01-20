@@ -1,9 +1,20 @@
 <script>
-    import Nav from '$lib/components/navbar.svelte';
-    import races from '$lib/json/races.json';
-    import {theme} from "$lib/stores/store.js";
+    import Nav          from '$lib/components/navbar.svelte';
+    import races        from '$lib/json/races.json';
+    import {theme}      from "$lib/stores/store.js";
+    import raceClass    from '$lib/class/race/Race.js';
 
     let currentRaces = []
+
+    let apiRoute = "";
+    let apiResult = "";
+    let isHidden = true;
+
+    function onClickApiTest(){
+        let race = new raceClass();
+        apiResult = race.connectToApi(apiRoute);
+        return true;
+    }
 
     races.forEach(function (race) {
         if (race.status === "starte" || race.status === "future") {
@@ -17,6 +28,14 @@
     <Nav />
 
     <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 w-full h-fit p-3 mt-[60px] gap-4 dark:text-white light:text-black">
+        <div class="w-full h-fit p-3 mx-auto bg-primary-content">
+            <p>Which route to test?</p>
+            <input bind:value={apiRoute} type="text" class="rounded-box px-2" />
+            <button class="btn btn-sm btn-block w-fit btn-primary ml-2" on:click={onClickApiTest}>Test</button>
+            {#if !isHidden}
+                <p>{apiResult}</p>
+            {/if}
+        </div>
         <div class="card mt-2 mx-auto h-fit w-full bg-primary-content/100">
             <div class="card-body">
                 <h2 class="card-title">Active Races</h2>
