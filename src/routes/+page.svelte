@@ -10,10 +10,14 @@
     let apiResult = "";
     let isHidden = true;
 
-    function onClickApiTest(){
+    async function onClickApiTest(){
         let race = new raceClass();
-        apiResult = race.connectToApi(apiRoute);
-        return true;
+        try {
+            apiResult = await race.connectToApi(apiRoute);
+            return true;
+        } catch (e) {
+            console.error(e.message);
+        }
     }
 
     races.forEach(function (race) {
