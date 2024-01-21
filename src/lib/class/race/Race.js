@@ -1,7 +1,7 @@
 import racesData    from '$lib/json/races.json';
 import Participants from "$lib/class/participants/Participants.js";
-const apiUrl        = import.meta.env.VITE_API_URL;
-const apiRoute      = apiUrl + 'races/';
+// const apiUrl        = import.meta.env.VITE_API_URL;
+const apiRoute      = '/api/races/';
 
 class Race{
     constructor() {
