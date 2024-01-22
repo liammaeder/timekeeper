@@ -1,21 +1,22 @@
-const apiRoute        = import.meta.env.VITE_API_URL + 'races';
+import { format }   from "date-fns";
+const apiRoute      = import.meta.env.VITE_API_URL + 'race';
 
 class Race{
     constructor() {
-        this.name = "";
+        this.name   = "";
         this.status = -1;
-        this.date = new Date();
-        this.limit = 10;
+        this.date   = new Date();
+        this.limit  = 10;
         this.offset = 0;
     }
 
     async createRace() {
         const url = apiRoute + "/createRace";
         let jsonBody = {
-            values: {
-                name: this.name,
-                status: this.status,
-                date: this.date
+            "values": {
+                "name": this.name,
+                "status_id": this.status,
+                "date": this.date
             }
         }
 
@@ -25,36 +26,36 @@ class Race{
     async getActiveRaces() {
         const url = apiRoute + "/getRaces";
         let jsonBody = {
-            condition: {
-                status: "status in [1, 2]"
+            "condition": {
+                "status": "status_id IN (1, 2)"
             },
-            limit: this.limit,
-            offset: this.offset
+            "limit": this.limit,
+            "offset": this.offset
         }
 
-        return await this.doFetch(url, jsonBody);
+        return await this.doFetch(url, jsonBody, 'POST');
     }
 
     async getCompletedRaces() {
         const url = apiRoute + "/getRaces";
         let jsonBody = {
-            condition: {
-                status: "status = 3"
+            "condition": {
+                "status": "status_id = 3"
             },
-            limit: this.limit,
-            offset: this.offset
+            "limit": this.limit,
+            "offset": this.offset
         }
 
-        return await this.doFetch(url, jsonBody);
+        return await this.doFetch(url, jsonBody, 'POST');
     }
 
     async getRaceWithRacers(raceId) {
         const url = apiRoute + "/getRace";
         const jsonBody = {
-            id: raceId
+            "id": raceId
         }
 
-        let data = await this.doFetch(url, jsonBody);
+        let data = await this.doFetch(url, jsonBody, 'POST');
 
         if (!data) {
             data = {
@@ -66,28 +67,26 @@ class Race{
         return data;
     }
 
-    async doFetch(url, jsonBody) {
-        // eslint-disable-next-line no-useless-catch
-        try {
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(jsonBody)
-            });
+    async doFetch(url, jsonBody, method) {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(jsonBody)
+        });
 
-            if(!response.ok) {
-                console.error("JSON response:", response.json());
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            let result = await response.json();
-            result = JSON.parse(result);
-            return result;
-        } catch (err) {
-            throw err;
+        if(!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
+
+        let result = await response.json();
+        return result;
+    }
+
+    formatDate(dateObject) {
+        let date = new Date(dateObject);
+        return format(date, "dd-MM-yyyy");
     }
 }
 

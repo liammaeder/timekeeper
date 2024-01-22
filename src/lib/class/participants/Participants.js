@@ -24,9 +24,6 @@ export default class Participants{
             });
         })
 
-
-        console.log("Participants:", data);
-
         return data;
     }
 }
