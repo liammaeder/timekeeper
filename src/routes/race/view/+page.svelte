@@ -1,9 +1,8 @@
 <script>
-    import Nav              from '$lib/components/navbar.svelte';
+    import Nav              from '$lib/navbar/navbar.svelte';
     import Race             from '$lib/class/race/Race.js';
     import UrlController    from '$lib/class/Url.js';
     import { browser }      from '$app/environment';
-    import { theme }        from "$lib/stores/store.js";
     import { onMount }      from 'svelte';
     const race              = new Race();
     let dataFetched         = false;
@@ -42,7 +41,6 @@
     });
 </script>
 
-<div data-theme="{$theme}" class="h-screen justify-center text-primary">
     <Nav pageName="Race"/>
 
     {#if dataFetched}
@@ -159,4 +157,3 @@
             </div>
         </div>
     {/if}
-</div>
