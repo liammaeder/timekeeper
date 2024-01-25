@@ -102,7 +102,7 @@
                                         <button class="text-center w-full my-auto truncate" type="button" data-drawer-target="drawer-options-{participant.id}" data-drawer-toggle="drawer-options-{participant.id}" aria-controls="drawer-options-{participant.id}">
                                             {#each participant.racers as racer, i}
                                                 {racer.name}{#if i !== participant.racers.length-1}&nbsp;&&nbsp;{/if}
-                                            {/each}s
+                                            {/each}
                                         </button>
                                     </div>
                                     <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
