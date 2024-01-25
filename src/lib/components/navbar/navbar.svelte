@@ -1,5 +1,7 @@
 <script>
-    import Icon             from '@iconify/svelte';
+    import Icon     from '@iconify/svelte';
+    import profile  from '../../images/profile.png';
+    import logo     from '../../images/logo.png';
 </script>
 
 <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -12,8 +14,8 @@
                         <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
                     </svg>
                 </button>
-                <a href="/" class="flex ms-2 md:me-24">
-                    <Icon icon="basil:timer-outline" class="w-10 h-10 my-auto mx-1 dark:text-white" />
+                <a href="/#" class="flex ms-2 md:me-24">
+                    <img src={logo} class="h-8 me-3" alt="Timekeeper Logo" />
                     <span class="self-center text-xl font-bold sm:text-2xl whitespace-nowrap dark:text-white">Timekeeper</span>
                 </a>
             </div>
@@ -22,7 +24,7 @@
                     <div>
                         <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                             <span class="sr-only">Open user menu</span>
-                            <Icon icon="material-symbols-light:account-circle" class="dark:text-white w-10 h-10 rounded-full" />
+                            <img class="w-8 h-8 rounded-full" src={profile} alt="profile">
                         </button>
                     </div>
                     <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
@@ -36,7 +38,7 @@
                         </div>
                         <ul class="py-1" role="none">
                             <li>
-                                <a href="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</a>
+                                <a href="/#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</a>
                             </li>
                             <li>
                                 <a href="/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Settings</a>
@@ -53,7 +55,7 @@
     <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
         <ul class="space-y-2 font-medium">
             <li>
-                <a href="/" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <a href="/#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <Icon icon="material-symbols:team-dashboard" class="h-7 w-7 text-gray-500 dark:text-gray-400"/>
                     <span class="ms-3">Dashboard</span>
                 </a>

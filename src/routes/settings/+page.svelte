@@ -1,7 +1,5 @@
 <script>
-    import Nav              from '$lib/navbar/navbar.svelte';
-    import ComingSoon       from "$lib/components/ComingSoon.svelte";
+    import ComingSoon       from "$lib/components/misc/ComingSoon.svelte";
 </script>
 
-<Nav />
 <ComingSoon />

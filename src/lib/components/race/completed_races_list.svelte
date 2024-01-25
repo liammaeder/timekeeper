@@ -1,5 +1,6 @@
 <script>
     import { onMount }  from 'svelte';
+    import Loader       from '$lib/components/misc/Loader.svelte';
     import Race         from '$lib/class/race/Race.js';
     const raceCls       = new Race;
     let dataFetched     = false;
@@ -16,7 +17,8 @@
     });
 </script>
 
-<div>
+<div class="mx-2 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    <h5 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white">Race History</h5>
     {#if dataFetched}
         {#if completedRaces.length > 0}
             <div class="overflow-x-auto">
@@ -47,10 +49,6 @@
             <p>No completed races</p>
         {/if}
     {:else}
-        <div class="w-full h-full bordered text-center border-primary py-5 px-4">
-            <div class="m-auto">
-                <span class="loading loading-ring loading-lg"></span>
-            </div>
-        </div>
+        <Loader />
     {/if}
 </div>
