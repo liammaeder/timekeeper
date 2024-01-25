@@ -1,12 +1,5 @@
 <script>
-    import Nav from '$lib/components/navbar.svelte';
-    import {theme} from "$lib/stores/store.js";
-    import ThemeSwitcher from "$lib/components/ThemeSwitcher.svelte";
+    import ComingSoon       from "$lib/components/misc/ComingSoon.svelte";
 </script>
-<style>
 
-</style>
-<div data-theme="{$theme}" class="h-screen">
-    <Nav pageName="Settings"/>
-    <ThemeSwitcher />
-</div>
+<ComingSoon />
