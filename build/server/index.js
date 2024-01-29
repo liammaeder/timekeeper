@@ -109,7 +109,7 @@ const options = {
   root: Root,
   service_worker: false,
   templates: {
-    app: ({ head, body, assets: assets2, nonce, env }) => '<!doctype html>\r\n<html lang="en">\r\n	<head>\r\n		<meta charset="utf-8" />\r\n		<link rel="icon" href="' + assets2 + '/favicon.png" />\r\n		<meta name="viewport" content="width=device-width, initial-scale=1" />\r\n		<link rel="stylesheet" href="https://unpkg.com/@themesberg/flowbite@2.2.1/dist/flowbite.min.css" />\r\n		<title>Timekeeper</title>\r\n		' + head + '\r\n	</head>\r\n	<body style="display: contents">\r\n		<div class="text-black dark:text-white bg-white dark:bg-gray-800 h-screen">' + body + '</div>\r\n		<script src="https://unpkg.com/@themesberg/flowbite@2.2.1/dist/flowbite.bundle.js"><\/script>\r\n	</body>\r\n</html>\r\n',
+    app: ({ head, body, assets: assets2, nonce, env }) => '<!doctype html>\r\n<html lang="en">\r\n	<head>\r\n		<meta charset="utf-8" />\r\n		<link rel="icon" href="' + assets2 + '/favicon.png" />\r\n		<meta name="viewport" content="width=device-width, initial-scale=1" />\r\n		<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />\r\n		<title>Timekeeper</title>\r\n		' + head + '\r\n	</head>\r\n	<body style="display: contents">\r\n		<div class="text-black dark:text-white bg-white dark:bg-gray-800 min-h-screen h-fit">' + body + '</div>\r\n		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"><\/script>\r\n	</body>\r\n</html>\r\n',
     error: ({ status, message }) => '<!doctype html>\n<html lang="en">\n	<head>\n		<meta charset="utf-8" />\n		<title>' + message + `</title>
 
 		<style>
@@ -181,7 +181,7 @@ const options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "ihwpn7"
+  version_hash: "3ltb4t"
 };
 async function get_hooks() {
   return {};
