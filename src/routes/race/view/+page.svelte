@@ -3,6 +3,7 @@
     import UrlController    from '$lib/class/Url.js';
     import { browser }      from '$app/environment';
     import { onMount }      from 'svelte';
+    import Watch            from '$lib/components/race/watch.svelte';
     const race              = new Race();
     let dataFetched         = false;
     let noDataMatched       = false;
@@ -32,6 +33,9 @@
                 noDataMatched = true;
             }
 
+            console.log(raceDetails);
+
+
             raceState = raceDetails.status;
             dataFetched = true;
         } catch (error) {
@@ -39,6 +43,9 @@
         }
     });
 </script>
+
+<style>
+</style>
 
 {#if dataFetched}
     {#if noDataMatched}
@@ -90,31 +97,10 @@
                 <button class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-lg px-5 py-2 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 w-full">
                     Start All
                 </button>
-                <div class="flow-root">
-                    <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
-                        {#each raceDetails.participants as participant}
-                            <li class="py-3 sm:py-4">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0">
-                                        <button class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Start</button>
-                                    </div>
-                                    <div class="flex-1 min-w-0 ms-4">
-                                        <button class="text-center w-full my-auto truncate" type="button" data-drawer-target="drawer-options-{participant.id}" data-drawer-toggle="drawer-options-{participant.id}" aria-controls="drawer-options-{participant.id}">
-                                            {#each participant.racers as racer, i}
-                                                {racer.name}{#if i !== participant.racers.length-1}&nbsp;&&nbsp;{/if}
-                                            {/each}
-                                        </button>
-                                    </div>
-                                    <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                        <button class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Stop</button>
-                                    </div>
-                                    <div id="drawer-options-{participant.id}" class="transition-transform -translate-y-full fixed z-40 transform-none" tabindex="-1" aria-labelledby="drawer-label-{participant.id}">
-                                        <h5 id="drawer-label-{participant.id}" class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400">TESTING</h5>
-                                    </div>
-                                </div>
-                            </li>
-                        {/each}
-                    </ul>
+                <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-3 mt-2 lg:grid-cols-3">
+                    {#each raceDetails.participants as participant}
+                        <Watch participant={participant} />
+                    {/each}
                 </div>
             </div>
         {/if}

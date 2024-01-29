@@ -12,6 +12,7 @@
 
             dataFetched = true;
         } catch (e) {
+            console.info(e);
             console.error("Error occurred: ", e.message);
         }
     });

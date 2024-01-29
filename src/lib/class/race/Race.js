@@ -1,4 +1,4 @@
-import { format }   from "date-fns";
+import {format}     from "date-fns";
 const apiRoute      = import.meta.env.VITE_API_URL + 'race';
 
 class Race{
@@ -23,24 +23,34 @@ class Race{
         return this.doFetch(url, jsonBody);
     }
 
-    async getActiveRaces() {
-        const url = apiRoute + "/getRaces";
+    async getAllRaces() {
+        const url = apiRoute + "/getRacesList";
         let jsonBody = {
-            "condition": {
-                "status": "status_id IN (1, 2)"
-            },
+            "conditions": {},
             "limit": this.limit,
             "offset": this.offset
         }
 
+        return await this.doFetch(url, jsonBody, "POST");
+    }
+
+    async getActiveRaces() {
+        const url = apiRoute + "/getRaces";
+        let jsonBody = {
+            "conditions": {
+                "status": "status IN (1, 2)"
+            },
+            "limit": this.limit,
+            "offset": this.offset
+        }
         return await this.doFetch(url, jsonBody, 'POST');
     }
 
     async getCompletedRaces() {
         const url = apiRoute + "/getRaces";
         let jsonBody = {
-            "condition": {
-                "status": "status_id = 3"
+            "conditions": {
+                "status": "status = 3"
             },
             "limit": this.limit,
             "offset": this.offset
@@ -80,8 +90,7 @@ class Race{
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        let result = await response.json();
-        return result;
+        return await response.json();
     }
 
     formatDate(dateObject) {
