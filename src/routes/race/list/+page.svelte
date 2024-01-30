@@ -16,6 +16,16 @@
         }
     });
 
+    function formatDate(dateStr) {
+        let date = new Date(dateStr);
+        const options = { year: 'numeric', month: 'short', day: 'numeric'};
+        return date.toLocaleString('en-ZA', options);
+    }
+
+    function formatStatus(statusStr) {
+        return statusStr.charAt(0).toUpperCase() + statusStr.slice(1);
+    }
+
     function onClickRow(raceId) {
         console.log(raceId);
         window.location.href = `/race/view?id=${raceId}`;
@@ -60,10 +70,10 @@
                             {raceRow.name}
                         </th>
                         <td class="px-6 py-4">
-                            {raceRow.date}
+                            {formatDate(raceRow.date)}
                         </td>
                         <td class="px-6 py-4">
-                            {raceRow.status}
+                            {formatStatus(raceRow.status)}
                         </td>
                     </tr>
                 {/each}

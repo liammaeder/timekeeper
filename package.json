@@ -46,6 +46,7 @@
 		"svelte-device-info": "^1.0.0",
 		"svelte-routing": "^2.11.0",
 		"tailwind-merge": "^2.2.1",
-		"theme-change": "^2.5.0"
+		"theme-change": "^2.5.0",
+		"ws": "^8.16.0"
 	}
 }
