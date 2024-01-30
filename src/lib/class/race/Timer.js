@@ -9,6 +9,10 @@ class Timer {
         this.laps               = [];
     }
 
+    getParticipant() {
+
+    }
+
     start() {
         if (!this.isRunning) {
             this.startTime  = new Date();
@@ -46,36 +50,49 @@ class Timer {
         if (this.isRunning) {
             const lapTime = new Date() - this.startTime;
             this.laps.push(lapTime);
+            console.log(this.laps);
         }
     }
 
     reset () {
         this.isRunning      = false;
-        this.raceStart      = null;
-        this.raceEnd        = null;
         this.startTime      = null;
         this.pauseTime      = null;
         this.laps           = [];
     }
 
-    getDuration() {
-        let currDuration;
+    formatTime(currTime) {
         const dblZ = (num) => num.toString().padStart(2, '0');
 
-        if (this.isRunning) {
-            let currTime    = new Date() - (this.startTime || 0) - this.totalPauseDuration;
-            const hours     = dblZ(Math.floor(currTime / 3600000));
-            const minutes   = dblZ(Math.floor((currTime % 3600000) / 60000));
-            const seconds   = dblZ(Math.floor((currTime % 60000) / 1000));
-            currDuration    = `${hours}:${minutes}:${seconds}`;
-        } else if (!this.isRunning && this.startTime !== null && this.pauseTime !== null) {
-            let currTime    = this.pauseTime - (this.startTime || 0) - this.totalPauseDuration;
-            const hours     = dblZ(Math.floor(currTime / 3600000));
-            const minutes   = dblZ(Math.floor((currTime % 3600000) / 60000));
-            const seconds   = dblZ(Math.floor((currTime % 60000) / 1000));
-            currDuration    = `${hours}:${minutes}:${seconds}`;
+        if (currTime >= 3600000) {
+            const hours         = dblZ(Math.floor(currTime / 3600000));
+            const minutes       = dblZ(Math.floor((currTime % 3600000) / 60000));
+            const seconds       = dblZ(Math.floor((currTime % 60000) / 1000));
+            const milliseconds  = dblZ(Math.floor(currTime % 1000)).slice(0, 2);
+            return `${hours}:${minutes}:${seconds}:${milliseconds}`;
+        } else if (currTime >= 60000) {
+            const minutes       = dblZ(Math.floor(currTime / 60000));
+            const seconds       = dblZ(Math.floor((currTime % 60000) / 1000));
+            const milliseconds  = dblZ(Math.floor(currTime % 1000)).slice(0, 2);
+            return `${minutes}:${seconds}:${milliseconds}`;
         } else {
-            currDuration    = '00:00:00';
+            const seconds       = dblZ(Math.floor((currTime % 60000) / 1000));
+            const milliseconds  = dblZ(Math.floor(currTime % 1000)).slice(0, 2);
+            return `${seconds}:${milliseconds}`;
+        }
+    }
+
+    getDuration() {
+        let currDuration;
+
+        if (this.isRunning) {
+            let currTime = new Date() - (this.startTime || 0) - this.totalPauseDuration;
+            currDuration = this.formatTime(currTime);
+        } else if (!this.isRunning && this.startTime !== null && this.pauseTime !== null) {
+            let currTime = this.pauseTime - (this.startTime || 0) - this.totalPauseDuration;
+            currDuration = this.formatTime(currTime);
+        } else {
+            currDuration = this.formatTime(0);
         }
 
         return currDuration;
