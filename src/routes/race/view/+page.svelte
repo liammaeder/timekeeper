@@ -8,8 +8,10 @@
     let dataFetched         = false;
     let noDataMatched       = false;
     let id                  = -1;
+    let isStarted           = false;
     let raceDetails;
     let raceState;
+    let eventDispatcher;
 
     if (browser) {
         let urlString = window.location.href;
@@ -33,8 +35,7 @@
                 noDataMatched = true;
             }
 
-            console.log(raceDetails);
-
+            eventDispatcher = document.createDocumentFragment();
 
             raceState = raceDetails.status;
             dataFetched = true;
@@ -42,6 +43,11 @@
             console.error("Error fetching race:", error.message);
         }
     });
+
+    function startAllWatches() {
+        isStarted = true;
+        eventDispatcher.dispatchEvent(new CustomEvent('startAll'));
+    }
 </script>
 
 <style>
@@ -94,12 +100,14 @@
         {:else}
             <div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700 text-center">
                 <h5 class="mb-4 text-2xl font-bold text-gray-900 dark:text-white">{raceDetails.name}: {raceDetails.date}</h5>
-                <button class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-lg px-5 py-2 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 w-full">
-                    Start All
-                </button>
-                <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-3 mt-2 lg:grid-cols-3">
+                {#if !isStarted}
+                    <button on:click={() => startAllWatches()} class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-lg px-5 py-2 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 w-full">
+                        Start All
+                    </button>
+                {/if}
+                <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-3 mt-2 lg:grid-cols-3 overflow-y-scroll">
                     {#each raceDetails.participants as participant}
-                        <Watch participant={participant} />
+                        <Watch participant={participant} {eventDispatcher} />
                     {/each}
                 </div>
             </div>
