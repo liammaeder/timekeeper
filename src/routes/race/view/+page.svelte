@@ -1,5 +1,7 @@
 <script>
     import Race             from '$lib/class/race/Race.js';
+    import FormatterCls     from "$lib/class/helpers/Formatters.js";
+    const formatter         = new FormatterCls();
     import UrlController    from '$lib/class/helpers/Url.js';
     import { browser }      from '$app/environment';
     import { onMount }      from 'svelte';
@@ -38,6 +40,7 @@
             eventDispatcher = document.createDocumentFragment();
 
             raceState = raceDetails.status;
+            console.log(raceState);
             dataFetched = true;
         } catch (error) {
             console.error("Error fetching race:", error.message);
@@ -59,7 +62,7 @@
             No race information available...
         </div>
     {:else}
-        {#if raceState === 3}
+        {#if raceState === "completed"}
             <div class="mx-auto p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <h5 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">{raceDetails.name}: {raceDetails.date}</h5>
             </div>
@@ -67,30 +70,26 @@
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class=""></th>
-                            <th scope="col" class="px-6 py-3">Boat Type</th>
                             <th scope="col" class="px-6 py-3">Racers</th>
+                            <th scope="col" class="px-6 py-3">Boat Type</th>
                             <th scope="col" class="px-6 py-3">Time</th>
                         </tr>
                     </thead>
                     <tbody>
                         {#each raceDetails.participants as participants (participants.id)}
                             <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {participants.id}
-                                </th>
-                                <td class="px-6 py-4">
-                                    {participants.type}
-                                </td>
-                                <td class="px-6 py-4">
+                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <ol>
                                         {#each participants.racers as racer}
-                                            <li>{racer.name}</li>
+                                            <li> - {racer.name}</li>
                                         {/each}
                                     </ol>
                                 </td>
                                 <td class="px-6 py-4">
-                                    {participants.time}
+                                    {participants.type}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {formatter.formatDisplayTime(participants.time)}
                                 </td>
                             </tr>
                         {/each}
