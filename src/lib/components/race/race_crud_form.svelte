@@ -1,5 +1,5 @@
 <script>
-    import ParticipantForm  from "$lib/components/participant/participant_form.svelte";
+    import ParticipantForm  from "$lib/components/participant/participant_race_form.svelte";
     import raceCls          from "$lib/class/race/Race.js";
     let race                = new raceCls();
     import partCls          from "$lib/class/participants/Participants.js";
