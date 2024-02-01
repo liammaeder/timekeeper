@@ -15,7 +15,7 @@ class Race{
         let jsonBody = {
             "values": {
                 "name": this.name,
-                "status_id": this.status,
+                "status": this.status,
                 "date": this.date
             }
         }
@@ -26,7 +26,7 @@ class Race{
     async getAllRaces() {
         const url = apiRoute + "/getRacesList";
         let jsonBody = {
-            "conditions": {},
+            "conditions": [],
             "limit": this.limit,
             "offset": this.offset
         }
@@ -37,11 +37,11 @@ class Race{
     async getActiveRaces() {
         const url = apiRoute + "/getRaces";
         let jsonBody = {
-            "conditions": {
-                "status": "status IN (1, 2)"
-            },
-            "limit": this.limit,
-            "offset": this.offset
+            conditions: [
+                "status IN (1, 2)"
+            ],
+            limit: this.limit,
+            offset: this.offset
         }
         return await this.doFetch(url, jsonBody, 'POST');
     }
@@ -49,11 +49,11 @@ class Race{
     async getCompletedRaces() {
         const url = apiRoute + "/getRaces";
         let jsonBody = {
-            "conditions": {
-                "status": "status = 3"
-            },
-            "limit": this.limit,
-            "offset": this.offset
+            conditions: [
+                "status = 3"
+            ],
+            limit: this.limit,
+            offset: this.offset
         }
 
         return await this.doFetch(url, jsonBody, 'POST');
@@ -62,7 +62,7 @@ class Race{
     async getRaceWithRacers(raceId) {
         const url = apiRoute + "/getRace";
         const jsonBody = {
-            "id": raceId
+            id: raceId
         }
 
         let data = await this.doFetch(url, jsonBody, 'POST');

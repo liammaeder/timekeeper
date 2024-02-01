@@ -1,11 +1,10 @@
 <script>
-
-    import Loader       from '$lib/components/misc/Loader.svelte';
+    import Loader           from '$lib/components/misc/Loader.svelte';
     export let participant;
-    import typeCls      from "$lib/class/participants/ParticipantType.js";
-    import { onMount} from "svelte";
-    let partType        = new typeCls();
-    let dataFetched     = false;
+    import typeCls          from "$lib/class/participants/ParticipantType.js";
+    import { onMount}       from "svelte";
+    let partType            = new typeCls();
+    let dataFetched         = false;
     let boatTypes;
 
     onMount(async () => {

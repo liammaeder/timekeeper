@@ -1,6 +1,6 @@
 <script>
     import Race             from '$lib/class/race/Race.js';
-    import UrlController    from '$lib/class/Url.js';
+    import UrlController    from '$lib/class/helpers/Url.js';
     import { browser }      from '$app/environment';
     import { onMount }      from 'svelte';
     import Watch            from '$lib/components/race/watch.svelte';
