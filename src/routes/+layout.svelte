@@ -1,8 +1,7 @@
 <script>
-	import '../app.pcss';
+	import '../app.css';
 	import Nav from '$lib/components/navbar/navbar.svelte';
 	import 'flowbite';
-	import '../app.pcss';
 </script>
 
 <Nav></Nav>

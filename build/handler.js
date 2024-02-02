@@ -1,14 +1,15 @@
 import './shims.js';
-import fs$1 from 'node:fs';
+import fs$1, {createReadStream} from 'node:fs';
 import path from 'node:path';
 import * as fs from 'fs';
-import { readdirSync, statSync } from 'fs';
-import { resolve, join, normalize } from 'path';
+import {readdirSync, statSync} from 'fs';
+import {join, normalize, resolve} from 'path';
 import * as qs from 'querystring';
-import { fileURLToPath } from 'node:url';
-import { Server } from './server/index.js';
-import { manifest, prerendered } from './server/manifest.js';
-import { env } from './env.js';
+import {fileURLToPath} from 'node:url';
+import {Readable} from 'node:stream';
+import {Server} from './server/index.js';
+import {base, manifest, prerendered} from './server/manifest.js';
+import {env} from './env.js';
 
 function totalist(dir, callback, pre='') {
 	dir = resolve('.', dir);
@@ -1041,12 +1042,15 @@ function get_raw_body(req, body_size_limit) {
  */
 async function getRequest({ request, base, bodySizeLimit }) {
 	return new Request(base + request.url, {
-		// @ts-expect-error
-		duplex: 'half',
-		method: request.method,
-		headers: /** @type {Record<string, string>} */ (request.headers),
-		body: get_raw_body(request, bodySizeLimit)
-	});
+        // @ts-expect-error
+        duplex: 'half',
+        method: request.method,
+        headers: /** @type {Record<string, string>} */ (request.headers),
+        body:
+            request.method === 'GET' || request.method === 'HEAD'
+                ? undefined
+                : get_raw_body(request, bodySizeLimit)
+    });
 }
 
 /**
@@ -1118,20 +1122,30 @@ async function setResponse(res, response) {
 
 				if (!res.write(value)) {
 					res.once('drain', next);
-					return;
-				}
-			}
-			res.end();
-		} catch (error) {
-			cancel(error instanceof Error ? error : new Error(String(error)));
-		}
-	}
+                    return;
+                }
+            }
+            res.end();
+        } catch (error) {
+            cancel(error instanceof Error ? error : new Error(String(error)));
+        }
+    }
+}
+
+/**
+ * Converts a file on disk to a readable stream
+ * @param {string} file
+ * @returns {ReadableStream}
+ * @since 2.4.0
+ */
+function createReadableStream(file) {
+    return /** @type {ReadableStream} */ (Readable.toWeb(createReadStream(file)));
 }
 
 /* global "" */
 
 const server = new Server(manifest);
-await server.init({ env: process.env });
+
 const origin = env('ORIGIN', undefined);
 const xff_depth = parseInt(env('XFF_DEPTH', '1'));
 const address_header = env('ADDRESS_HEADER', '').toLowerCase();
@@ -1141,22 +1155,29 @@ const port_header = env('PORT_HEADER', '').toLowerCase();
 const body_size_limit = Number(env('BODY_SIZE_LIMIT', '524288'));
 
 if (isNaN(body_size_limit)) {
-	throw new Error(
-		`Invalid BODY_SIZE_LIMIT: '${env('BODY_SIZE_LIMIT')}'. Please provide a numeric value.`
-	);
+    throw new Error(
+        `Invalid BODY_SIZE_LIMIT: '${env('BODY_SIZE_LIMIT')}'. Please provide a numeric value.`
+    );
 }
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
+
+const asset_dir = `${dir}/client${base}`;
+
+await server.init({
+    env: process.env,
+    read: (file) => createReadableStream(`${asset_dir}/${file}`)
+});
 
 /**
  * @param {string} path
  * @param {boolean} client
  */
 function serve(path, client = false) {
-	return (
-		fs$1.existsSync(path) &&
-		sirv(path, {
-			etag: true,
+    return (
+        fs$1.existsSync(path) &&
+        sirv(path, {
+            etag: true,
 			gzip: true,
 			brotli: true,
 			setHeaders:
@@ -1212,8 +1233,8 @@ const ssr = async (req, res) => {
 			bodySizeLimit: body_size_limit
 		});
 	} catch {
-		res.statusCode = 400;
-		res.end('Invalid request body');
+        res.statusCode = 400;
+        res.end('Bad Request');
 		return;
 	}
 
