@@ -3,18 +3,50 @@ import { writable } from 'svelte/store';
 
 export default class Racers{
     constructor(id = -1) {
-        this.id         = id;
-        this.name       = null;
-        this.user       = null;
-        this.csa        = null;
-        this.limit      = 10;
-        this.offset     = 0;
-        this.isDeleting = writable(false);
-        this.isSaving   = writable(false);
+        this.id             = id;
+        this.name           = null;
+        this.user           = null;
+        this.csa            = null;
+        this.participant    = 0;
+        this.limit          = 10;
+        this.offset         = 0;
+        this.isDeleting     = writable(false);
+        this.isSaving       = writable(false);
+        this.isLinking      = writable(false);
     }
 
     async createRacer() {
+        this.isSaving.set(true);
+        setTimeout(() => {
+            this.linkRacer();
+            // this.isSaving.set(false);
+        }, 2000);
+        // const url = apiRoute + "/createRacer";
+        // const jsonBody = {
+        //     "values": {
+        //         "name": this.name,
+        //         "csa": this.csa,
+        //         "user": this.user,
+        //     }
+        // }
+        //
+        // let result = await this.doFetch(url, jsonBody, "POST");
+        // this.isSaving.set(false);
+        // return result;
+    }
 
+    async linkRacer() {
+        this.isLinking.set(true);
+        setTimeout(() => {
+            this.isLinking.set(false);
+        }, 2000);
+        // const url = apiRoute + "/linkRacer";
+        // const jsonBody = {
+        //     "values": {
+        //         "racer": this.id,
+        //         "participant": this.participant
+        //     }
+        // }
     }
 
     async getRacer() {
@@ -58,10 +90,19 @@ export default class Racers{
 
     async updateRacer() {
         this.isSaving.set(true);
-        setTimeout(() => {
-            this.isSaving.set(false);
-        }, 5000);
+        const url = apiRoute + "/updateRacer";
+        const jsonBody = {
+            "conditions":[`id = ${this.id}`],
+            "values": {
+                "name": this.name,
+                "csa": this.csa,
+                "user": this.user,
+            }
+        }
 
+        const result = await this.doFetch(url, jsonBody, "POST");
+        this.isSaving.set(false);
+        return result;
     }
 
     async deleteRacer() {

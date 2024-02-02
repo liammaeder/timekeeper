@@ -1,6 +1,6 @@
 <script>
-    import ComingSoon   from "$lib/components/misc/ComingSoon.svelte";
+    import RacerRaceForm from "$lib/components/racer/racer_race_form.svelte";
 </script>
 
-<ComingSoon />
+<RacerRaceForm />
 
