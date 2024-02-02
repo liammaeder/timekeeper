@@ -1,8 +1,10 @@
 <script>
+
+    import { onMount}       from "svelte";
     import Loader           from '$lib/components/misc/Loader.svelte';
+    import RacerRaceForm    from "$lib/components/racer/racer_race_form.svelte";
     export let participant;
     import typeCls          from "$lib/class/participants/ParticipantType.js";
-    import { onMount}       from "svelte";
     let partType            = new typeCls();
     let dataFetched         = false;
     let boatTypes;
@@ -29,6 +31,19 @@
                 {/each}
             </select>
         </div>
+
+        {#if participant.boatType}
+            {#if participant.boatType === 1}
+                <RacerRaceForm participantId={participant.id}/>
+            {:else if participant.boatType === 2}
+                <RacerRaceForm participantId={participant.id}/>
+                <RacerRaceForm participantId={participant.id}/>
+            {:else}
+                <RacerRaceForm participantId={participant.id}/>
+                <RacerRaceForm participantId={participant.id}/>
+                <RacerRaceForm participantId={participant.id}/>
+            {/if}
+        {/if}
     </form>
 {:else}
     <Loader />
