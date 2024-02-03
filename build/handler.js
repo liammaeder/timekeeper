@@ -11,15 +11,15 @@ import {Server} from './server/index.js';
 import {base, manifest, prerendered} from './server/manifest.js';
 import {env} from './env.js';
 
-function totalist(dir, callback, pre='') {
-	dir = resolve('.', dir);
-	let arr = readdirSync(dir);
-	let i=0, abs, stats;
-	for (; i < arr.length; i++) {
-		abs = join(dir, arr[i]);
-		stats = statSync(abs);
-		stats.isDirectory()
-			? totalist(abs, callback, join(pre, arr[i]))
+function totalist(dir, callback, pre = '') {
+    dir = resolve('.', dir);
+    let arr = readdirSync(dir);
+    let i = 0, abs, stats;
+    for (; i < arr.length; i++) {
+        abs = join(dir, arr[i]);
+        stats = statSync(abs);
+        stats.isDirectory()
+            ? totalist(abs, callback, join(pre, arr[i]))
 			: callback(join(pre, arr[i]), abs, stats);
 	}
 }
@@ -1041,7 +1041,7 @@ function get_raw_body(req, body_size_limit) {
  * @returns {Promise<Request>}
  */
 async function getRequest({ request, base, bodySizeLimit }) {
-	return new Request(base + request.url, {
+    return new Request(base + request.url, {
         // @ts-expect-error
         duplex: 'half',
         method: request.method,
@@ -1114,14 +1114,14 @@ async function setResponse(res, response) {
 
 	next();
 	async function next() {
-		try {
-			for (;;) {
-				const { done, value } = await reader.read();
+        try {
+            for (; ;) {
+                const {done, value} = await reader.read();
 
-				if (done) break;
+                if (done) break;
 
-				if (!res.write(value)) {
-					res.once('drain', next);
+                if (!res.write(value)) {
+                    res.once('drain', next);
                     return;
                 }
             }
@@ -1178,16 +1178,16 @@ function serve(path, client = false) {
         fs$1.existsSync(path) &&
         sirv(path, {
             etag: true,
-			gzip: true,
-			brotli: true,
-			setHeaders:
-				client &&
-				((res, pathname) => {
-					// only apply to build directory, not e.g. version.json
-					if (pathname.startsWith(`/${manifest.appPath}/immutable/`) && res.statusCode === 200) {
-						res.setHeader('cache-control', 'public,max-age=31536000,immutable');
-					}
-				})
+            gzip: true,
+            brotli: true,
+            setHeaders:
+                client &&
+                ((res, pathname) => {
+                    // only apply to build directory, not e.g. version.json
+                    if (pathname.startsWith(`/${manifest.appPath}/immutable/`) && res.statusCode === 200) {
+                        res.setHeader('cache-control', 'public,max-age=31536000,immutable');
+                    }
+                })
 		})
 	);
 }
@@ -1235,8 +1235,8 @@ const ssr = async (req, res) => {
 	} catch {
         res.statusCode = 400;
         res.end('Bad Request');
-		return;
-	}
+        return;
+    }
 
 	setResponse(
 		res,

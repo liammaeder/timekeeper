@@ -19,13 +19,15 @@ import {r as readable, w as writable} from './chunks/index-epd9VaT-.js';
 
 let base = "";
 let assets = base;
-const initial = { base, assets };
+const initial = {base, assets};
+
 function override(paths) {
-  base = paths.base;
-  assets = paths.assets;
+	base = paths.base;
+	assets = paths.assets;
 }
+
 function reset() {
-  base = initial.base;
+	base = initial.base;
   assets = initial.assets;
 }
 let public_env = {};
@@ -197,7 +199,7 @@ const options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-	version_hash: "16rrhwz"
+	version_hash: "wzuckd"
 };
 async function get_hooks() {
   return {};
