@@ -8,8 +8,8 @@ import * as qs from 'querystring';
  * @param {boolean} [loose] Allow open-ended matching. Ignored with `RegExp` input.
  */
 function parse$1(input, loose) {
-	if (input instanceof RegExp) return { keys:false, pattern:input };
-	var c, o, tmp, ext, keys=[], pattern='', arr = input.split('/');
+    if (input instanceof RegExp) return {keys: false, pattern: input};
+    var c, o, tmp, ext, keys = [], pattern = '', arr = input.split('/');
 	arr[0] || arr.shift();
 
 	while (tmp = arr.shift()) {
