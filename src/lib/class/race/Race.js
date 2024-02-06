@@ -1,12 +1,14 @@
-import {format}     from "date-fns";
+import {format} from "date-fns";
+
 const apiRoute      = import.meta.env.VITE_API_URL + 'race';
 
 class Race{
     constructor() {
-        this.name   = "";
-        this.status = -1;
-        this.date   = new Date();
-        this.limit  = 10;
+        this.id = null;
+        this.name = "";
+        this.status = 1;
+        this.date = new Date().toISOString().slice(0, 19).replace("T", " ");
+        this.limit = 10;
         this.offset = 0;
     }
 
@@ -20,7 +22,19 @@ class Race{
             }
         }
 
-        return this.doFetch(url, jsonBody);
+        let result = await this.doFetch(url, jsonBody, "POST");
+
+        if (result && result.insertId) {
+            this.id = result.insertId;
+            result = await this.getEditableRace();
+            if (result) {
+                this.name = result.name;
+                this.status = result.status;
+                this.date = result.date;
+            }
+        }
+
+        return result;
     }
 
     async getAllRaces() {
@@ -59,6 +73,18 @@ class Race{
         return await this.doFetch(url, jsonBody, 'POST');
     }
 
+    async getRaceParticipants() {
+        const url = apiRoute + "/getRaceParticipants";
+        let jsonBody = {
+            conditions: [
+                `race = ${this.id}`
+            ],
+            limit: 99999999,
+            offset: this.offset
+        }
+        return await this.doFetch(url, jsonBody, 'POST');
+    }
+
     async getRaceWithRacers(raceId) {
         const url = apiRoute + "/getRace";
         const jsonBody = {
@@ -77,7 +103,27 @@ class Race{
         return data;
     }
 
-    async doFetch(url, jsonBody, method) {
+    async getEditableRace() {
+        const url = apiRoute + "/getEditableRace";
+        const jsonBody = {
+            "conditions": [
+                `id = ${this.id}`
+            ]
+        }
+
+        let data = await this.doFetch(url, jsonBody, 'POST');
+
+        if (!data) {
+            data = {
+                "Erro": false,
+                "Message": `No race found for ID: ${this.id}`
+            };
+        }
+
+        return data[0];
+    }
+
+    async doFetch(url, jsonBody, method = "POST") {
         const response = await fetch(url, {
             method: method,
             headers: {
@@ -86,7 +132,7 @@ class Race{
             body: JSON.stringify(jsonBody)
         });
 
-        if(!response.ok) {
+        if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 

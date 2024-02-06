@@ -10,39 +10,39 @@ return {
 	assets: new Set(["favicon.png"]),
 	mimeTypes: {".png":"image/png"},
 	_: {
-		client: {
-			"start": "_app/immutable/entry/start.X6NMAOUu.js",
-			"app": "_app/immutable/entry/app.0omNJup-.js",
-			"imports": ["_app/immutable/entry/start.X6NMAOUu.js", "_app/immutable/chunks/entry.GbKSuSL6.js", "_app/immutable/chunks/scheduler.uLYmYrce.js", "_app/immutable/chunks/index._ceT3Oor.js", "_app/immutable/entry/app.0omNJup-.js", "_app/immutable/chunks/scheduler.uLYmYrce.js", "_app/immutable/chunks/index.UMDBvbzV.js"],
-			"stylesheets": [],
-			"fonts": [],
-			"uses_env_dynamic_public": false
-		},
-		nodes: [
-			__memo(() => import('./chunks/0-KqJ3nWYl.js')),
-			__memo(() => import('./chunks/1-qtrqADlV.js')),
-			__memo(() => import('./chunks/2-QtbmKgGH.js')),
-			__memo(() => import('./chunks/3-mlRIa_PF.js')),
-			__memo(() => import('./chunks/4-alAWZM3O.js')),
-			__memo(() => import('./chunks/5-w6LUbgz8.js')),
-			__memo(() => import('./chunks/6-Ma7IgYdr.js')),
-			__memo(() => import('./chunks/7-MHn8uVh_.js')),
-			__memo(() => import('./chunks/8-MWwrBACe.js')),
-			__memo(() => import('./chunks/9-Ls3ICNLk.js')),
-			__memo(() => import('./chunks/10-mwSA9q9L.js')),
-			__memo(() => import('./chunks/11-I6MZRk5v.js')),
-			__memo(() => import('./chunks/12-BeVYboxg.js'))
-		],
-		routes: [
-			{
-				id: "/",
-				pattern: /^\/$/,
-				params: [],
-				page: {layouts: [0,], errors: [1,], leaf: 2},
-				endpoint: null
-			},
-			{
-				id: "/racer/edit",
+        client: {
+            "start": "_app/immutable/entry/start.bxoFZny0.js",
+            "app": "_app/immutable/entry/app.AvTQnOD4.js",
+            "imports": ["_app/immutable/entry/start.bxoFZny0.js", "_app/immutable/chunks/entry.5aMDM-RC.js", "_app/immutable/chunks/scheduler.uLYmYrce.js", "_app/immutable/chunks/index._ceT3Oor.js", "_app/immutable/entry/app.AvTQnOD4.js", "_app/immutable/chunks/scheduler.uLYmYrce.js", "_app/immutable/chunks/index.UMDBvbzV.js"],
+            "stylesheets": [],
+            "fonts": [],
+            "uses_env_dynamic_public": false
+        },
+        nodes: [
+            __memo(() => import('./chunks/0-KqJ3nWYl.js')),
+            __memo(() => import('./chunks/1-i941EKrK.js')),
+            __memo(() => import('./chunks/2-QtbmKgGH.js')),
+            __memo(() => import('./chunks/3-mlRIa_PF.js')),
+            __memo(() => import('./chunks/4-alAWZM3O.js')),
+            __memo(() => import('./chunks/5-w6LUbgz8.js')),
+            __memo(() => import('./chunks/6-Ma7IgYdr.js')),
+            __memo(() => import('./chunks/7-MHn8uVh_.js')),
+            __memo(() => import('./chunks/8-MWwrBACe.js')),
+            __memo(() => import('./chunks/9-Ls3ICNLk.js')),
+            __memo(() => import('./chunks/10-mwSA9q9L.js')),
+            __memo(() => import('./chunks/11-I6MZRk5v.js')),
+            __memo(() => import('./chunks/12-BeVYboxg.js'))
+        ],
+        routes: [
+            {
+                id: "/",
+                pattern: /^\/$/,
+                params: [],
+                page: {layouts: [0,], errors: [1,], leaf: 2},
+                endpoint: null
+            },
+            {
+                id: "/racer/edit",
 				pattern: /^\/racer\/edit\/?$/,
 				params: [],
 				page: { layouts: [0,], errors: [1,], leaf: 7 },
@@ -103,21 +103,21 @@ return {
 				params: [],
 				page: { layouts: [0,], errors: [1,], leaf: 11 },
 				endpoint: null
-			},
-			{
-				id: "/user/view",
-				pattern: /^\/user\/view\/?$/,
-				params: [],
-				page: {layouts: [0,], errors: [1,], leaf: 12},
-				endpoint: null
-			}
-		],
-		matchers: async () => {
+            },
+            {
+                id: "/user/view",
+                pattern: /^\/user\/view\/?$/,
+                params: [],
+                page: {layouts: [0,], errors: [1,], leaf: 12},
+                endpoint: null
+            }
+        ],
+        matchers: async () => {
 
-			return {};
-		},
-		server_assets: {}
-	}
+            return {};
+        },
+        server_assets: {}
+    }
 }
 })();
 
