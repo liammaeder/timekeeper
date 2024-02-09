@@ -23,7 +23,7 @@
 			  alertMessage={`You are currently using the Beta version of Timekeeper in Test, the Ready version will be available soon!`}/>
 	{:else}
 		<Warning alertHasLink={true} alertTitle="You are in Test!"
-				 alertMessage={`This is the testing environment, for the live app, please go to <a href="https://timekeeper.africa">Timekeeper</a>`}/>
+				 alertMessage={`This is the testing environment, for the live app, please go to <a href="https://timekeeper.africa" class="link">Timekeeper</a>`}/>
 	{/if}
 	<slot/>
 </div>
