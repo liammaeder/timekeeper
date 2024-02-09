@@ -1,3 +1,5 @@
+import FormatterCls from "$lib/class/helpers/Formatters.js";
+const formatter = new FormatterCls();
 class Timer {
     constructor(participantId) {
         this.participantId      = participantId;
@@ -87,12 +89,12 @@ class Timer {
 
         if (this.isRunning) {
             let currTime = new Date() - (this.startTime || 0) - this.totalPauseDuration;
-            currDuration = this.formatTime(currTime);
+            currDuration = formatter.formatRaceTime(currTime);
         } else if (!this.isRunning && this.startTime !== null && this.pauseTime !== null) {
             let currTime = this.pauseTime - (this.startTime || 0) - this.totalPauseDuration;
-            currDuration = this.formatTime(currTime);
+            currDuration = formatter.formatRaceTime(currTime);
         } else {
-            currDuration = this.formatTime(0);
+            currDuration = formatter.formatRaceTime(0);
         }
 
         return currDuration;

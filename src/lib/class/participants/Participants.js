@@ -1,29 +1,63 @@
-import Racer from '$lib/class/racers/Racers.js';
-import participantsData from '$lib/json/participants.json';
+const apiRoute = import.meta.env.VITE_API_URL + 'participant';
+import {writable} from "svelte/store";
 
-export default class Participants{
+export default class Participants {
     constructor() {
+        this.id = null;
+        this.race = null;
+        this.boatType = null;
+        this.racers = [];
+        this.isDeleting = writable(false);
+        this.isSaving = writable(false);
+        this.isLinking = writable(false);
     }
 
-    getParticipantsWithRacers(participantIdArr) {
-        let data = [];
+    async createParticipant() {
+        this.isSaving.set(true);
+        const url = apiRoute + "/createParticipant";
+        const jsonBody = {
+            "values": {
+                "race": this.race,
+                "type": this.boatType,
+            }
+        }
 
-        participantIdArr.forEach((participantId) => {
-            Object.entries(participantsData).forEach(([index, participant]) => {
-                if (participant.id === participantId) {
-                    let newParticipant = {};
-                    newParticipant.id = participant.id;
-                    newParticipant.type = participant.type;
-                    newParticipant.time = participant.time;
+        let result = await this.doFetch(url, jsonBody, "POST");
+        this.id = result.insertId;
+        this.isSaving.set(false);
+        return result.insertId;
+    }
 
-                    let racer = new Racer();
-                    newParticipant.racers = racer.getRacerArray(participant.racers);
+    async deleteParticipant() {
+        this.isDeleting.set(true);
+        const url = apiRoute + "/deleteParticipant";
+        const jsonBody = {
+            "conditions": [
+                `id = ${this.id}`
+            ]
+        }
 
-                    data.push(newParticipant);
-                }
-            });
-        })
+        let result = await this.doFetch(url, jsonBody, "POST");
+        if (result) {
+            this.id = null;
+            this.isDeleting.set(false);
+        }
+        return result.insertId;
+    }
 
-        return data;
+    async doFetch(url, jsonBody, method) {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(jsonBody)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        return await response.json();
     }
 }
