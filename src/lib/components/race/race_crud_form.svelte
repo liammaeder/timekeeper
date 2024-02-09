@@ -5,6 +5,7 @@
     import Modal from "$lib/components/misc/Modal.svelte";
     import Loader from '$lib/components/misc/Loader.svelte';
     import {onMount} from "svelte";
+    import pageEvent from "$lib/class/helpers/PageEvent.js";
     // import { createTrigger, isSavingStore }     from "$lib/components/participant/participantStore.js";
     //endregion
 
@@ -14,12 +15,16 @@
 
     //region local variables
     let race = new raceCls();
-    let isModalOpen = false;
+    let isParticipantModalOpen = false;
+    let isCancelConfirmModalOpen = false;
     let dataFetched = false;
     let participants = [];
     //endregion
 
     onMount(async () => {
+        pageEvent.addPageEvent('participant_saved', onParticipantSaved);
+        pageEvent.addPageEvent('participant_deleted', onParticipantDeleted);
+
         if (raceId && raceId > 0) {
             console.log(raceId)
             race.id = raceId;
@@ -31,6 +36,15 @@
         dataFetched = true;
     });
 
+    function onParticipantDeleted() {
+        closeParticipantModal();
+    }
+
+    async function onParticipantSaved() {
+        await getParticipants();
+        closeParticipantModal();
+    }
+
     async function createRace() {
         let result = await race.createRace();
         console.log(result);
@@ -39,16 +53,43 @@
         }
     }
 
+    async function saveRaceDetails() {
+        let result = await race.updateRace();
+        if (result) {
+            console.log(result);
+            raceId = result.id;
+            race.id = result.id;
+            race.name = result.name;
+            race.date = result.date;
+            race.status = result.status;
+        }
+    }
+
+    async function deleteRace() {
+        let result = await race.updateRace();
+        if (result) {
+            window.location.href = "/race/list";
+        }
+    }
+
     async function getParticipants() {
         participants = await race.getRaceParticipants();
     }
 
-    function openModal() {
-        isModalOpen = true;
+    function openParticipantModal() {
+        isParticipantModalOpen = true;
     }
 
-    function closeModal() {
-        isModalOpen = false;
+    function closeParticipantModal() {
+        isParticipantModalOpen = false;
+    }
+
+    function openConfirmCancelModal() {
+        isParticipantModalOpen = true;
+    }
+
+    function closeConfirmCancelModal() {
+        isParticipantModalOpen = false;
     }
 </script>
 
@@ -99,10 +140,24 @@
             </ul>
         {/if}
         <div class="w-full">
-            <button on:click={openModal}
+            <button on:click={openParticipantModal}
                     class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     type="button">
                 Add Participant
+            </button>
+        </div>
+    </div>
+    <div class="grid grid-cols-2 w-full mx-auto mb-2 px-2 py-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div class="w-full">
+            <button on:click={saveRaceDetails} type="button"
+                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                Save
+            </button>
+        </div>
+        <div class="w-full">
+            <button on:click={deleteRace} type="button"
+                    class="w-full ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                Cancel
             </button>
         </div>
     </div>
@@ -110,7 +165,14 @@
     <Loader/>
 {/if}
 
-<Modal isOpen={isModalOpen} onClose={closeModal} title="Create Participant">
+<Modal isOpen={isParticipantModalOpen} onClose={closeParticipantModal} title="Create Participant">
+    <!-- Modal body -->
+    <div class="p-4">
+        <ParticipantForm raceId={race.id}/>
+    </div>
+</Modal>
+
+<Modal isOpen={isCancelConfirmModalOpen} onClose={closeConfirmCancelModal} title="Create Participant">
     <!-- Modal body -->
     <div class="p-4">
         <ParticipantForm raceId={race.id}/>

@@ -10,19 +10,24 @@
 @tailwind utilities;
 
 body {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 /* Hide the arrows on number input fields */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 input[type="number"] {
-	-moz-appearance: textfield; /* Firefox */
+    -moz-appearance: textfield; /* Firefox */
 }
 
 @tailwind components;

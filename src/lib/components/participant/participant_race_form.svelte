@@ -33,11 +33,6 @@
     const handleEvent = data => {
         console.log(data);
     };
-
-    const removeEventHandler = data => {
-        console.log('Event Triggered!', data);
-        // Do something with the data
-    };
     //endregion
 
     onMount(async () => {
@@ -63,8 +58,10 @@
         pageEvent.triggerEvent("button_clicked", handleEvent);
     }
 
-    function deleteParticipant() {
-        pageEvent.triggerEvent("button_clicked", handleEvent);
+    async function deleteParticipant() {
+        let result = await participant.deleteParticipant();
+        console.log(result);
+        pageEvent.triggerEvent("participant_deleted", handleEvent);
     }
 
     onDestroy(() => {
