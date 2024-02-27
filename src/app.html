@@ -3,13 +3,20 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<script src="https://kit.fontawesome.com/cc7af1ead5.js" crossorigin="anonymous"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+		<link rel="manifest" href="%sveltekit.assets%/manifest.json">
 		<title>Timekeeper</title>
 		%sveltekit.head%
 	</head>
 	<body style="display: contents">
 		<div class="text-black dark:text-white bg-white dark:bg-gray-800 min-h-screen">%sveltekit.body%</div>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+		<script>
+			if ('serviceworker' in navigator) {
+				navigator.serviceWorker.register('/service-worker.js');
+			}
+		</script>
 	</body>
 </html>
