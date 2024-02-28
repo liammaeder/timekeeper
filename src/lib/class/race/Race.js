@@ -7,7 +7,7 @@ class Race{
         this.id = null;
         this.name = "";
         this.status = 1;
-        this.date = new Date().toISOString().slice(0, 19).replace("T", " ");
+        this.date = this.formatDate(new Date());
         this.limit = 10;
         this.offset = 0;
     }
@@ -111,16 +111,48 @@ class Race{
             ]
         }
 
-        let data = await this.doFetch(url, jsonBody, 'POST');
+        let result = await this.doFetch(url, jsonBody, 'POST');
+        if (result) {
+            this.id = result.id;
+            this.name = result.name;
+            this.date = this.formatDate(result.date);
+            this.status = result.status;
+        }
+    }
 
-        if (!data) {
-            data = {
-                "Erro": false,
-                "Message": `No race found for ID: ${this.id}`
-            };
+    async updateRace() {
+        const url = apiRoute + "/updateRace";
+        const raceDate = this.formatDate(this.date);
+        const jsonBody = {
+            "conditions": [
+                `id = ${this.id}`
+            ],
+            "values": {
+                "name": this.name,
+                "status": this.status,
+                "date": raceDate
+            }
         }
 
-        return data[0];
+        let result = await this.doFetch(url, jsonBody, 'POST');
+        console.log(result);
+        if (result.affectedRows > 0) {
+            result = this.getEditableRace();
+        }
+        return result;
+    }
+
+    async deleteRace() {
+        const url = apiRoute + "/deleteRaces";
+        const jsonBody = {
+            "conditions": [
+                `id = ${this.id}`
+            ]
+        }
+
+        let result = await this.doFetch(url, jsonBody, 'POST');
+        console.log(result);
+        return result.affectedRows > 0;
     }
 
     async doFetch(url, jsonBody, method = "POST") {
@@ -141,7 +173,7 @@ class Race{
 
     formatDate(dateObject) {
         let date = new Date(dateObject);
-        return format(date, "dd-MM-yyyy");
+        return format(date, "yyyy-MM-dd");
     }
 }
 

@@ -3,6 +3,7 @@ import {writable} from "svelte/store";
 
 export default class Participants {
     constructor() {
+        this.id = null;
         this.race = null;
         this.boatType = null;
         this.racers = [];
@@ -12,6 +13,7 @@ export default class Participants {
     }
 
     async createParticipant() {
+        this.isSaving.set(true);
         const url = apiRoute + "/createParticipant";
         const jsonBody = {
             "values": {
@@ -21,6 +23,25 @@ export default class Participants {
         }
 
         let result = await this.doFetch(url, jsonBody, "POST");
+        this.id = result.insertId;
+        this.isSaving.set(false);
+        return result.insertId;
+    }
+
+    async deleteParticipant() {
+        this.isDeleting.set(true);
+        const url = apiRoute + "/deleteParticipant";
+        const jsonBody = {
+            "conditions": [
+                `id = ${this.id}`
+            ]
+        }
+
+        let result = await this.doFetch(url, jsonBody, "POST");
+        if (result) {
+            this.id = null;
+            this.isDeleting.set(false);
+        }
         return result.insertId;
     }
 
