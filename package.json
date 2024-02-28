@@ -12,6 +12,9 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write ."
 	},
+	"optionalDependencies": {
+		"@rollup/rollup-linux-x64-gnu": "4.6.1"
+	},
 	"devDependencies": {
 		"@iconify/svelte": "^3.1.6",
 		"@rollup/plugin-json": "^6.1.0",
