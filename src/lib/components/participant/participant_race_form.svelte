@@ -50,7 +50,6 @@
         async function createParticipant() {
             participant.race = raceId;
             let participantID = await participant.createParticipant();
-            console.log(participantID);
         }
     });
 
@@ -60,7 +59,6 @@
 
     async function deleteParticipant() {
         let result = await participant.deleteParticipant();
-        console.log(result);
         pageEvent.triggerEvent("participant_deleted", handleEvent);
     }
 
@@ -83,7 +81,7 @@
         </div>
 
         {#if participant.boatType}
-            {#each Array.from({length: participant.boatType}) as t, i}
+            {#each Array.from({length: participant.boatType}) as participant, i}
                 <RacerRaceForm createRacer={createRacer} racerNum={i + 1} participantId={participant.id}/>
             {/each}
         {/if}

@@ -1,10 +1,19 @@
 <script>
+    //region imports
     import Race         from '$lib/class/race/Race.js';
     import {onMount}    from "svelte";
     import Loader       from '$lib/components/misc/Loader.svelte';
-    let race            = new Race();
+    import { goto }     from '$app/navigation';
+    //endregion
+
+    //region export variables
+    //endregion
+
+    //region local variables
+    let race        = new Race();
     let raceList;
     let dataFetched = false;
+    //endregion
 
     onMount(async () => {
         try {
@@ -27,8 +36,7 @@
     }
 
     function onClickRow(raceId) {
-        console.log(raceId);
-        window.location.href = `/race/view?id=${raceId}`;
+        goto(`/race/edit?id=${raceId}`);
     }
 </script>
 
