@@ -135,7 +135,6 @@ class Race{
         }
 
         let result = await this.doFetch(url, jsonBody, 'POST');
-        console.log(result);
         if (result.affectedRows > 0) {
             result = this.getEditableRace();
         }
@@ -145,13 +144,10 @@ class Race{
     async deleteRace() {
         const url = apiRoute + "/deleteRaces";
         const jsonBody = {
-            "conditions": [
-                `id = ${this.id}`
-            ]
+            'id': this.id
         }
 
         let result = await this.doFetch(url, jsonBody, 'POST');
-        console.log(result);
         return result.affectedRows > 0;
     }
 
@@ -172,8 +168,8 @@ class Race{
     }
 
     formatDate(dateObject) {
-        let date = new Date(dateObject);
-        return format(date, "yyyy-MM-dd");
+        if (typeof dateObject !== 'object') dateObject = new Date();
+        return format(dateObject, "yyyy-MM-dd");
     }
 }
 

@@ -4,7 +4,6 @@
     export let title;
 
     function closeModal() {
-        console.log("closing")
         onClose();
     }
 </script>
