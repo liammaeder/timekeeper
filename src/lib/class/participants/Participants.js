@@ -28,13 +28,30 @@ export default class Participants {
         return result.insertId;
     }
 
+    async getParticipant(id) {
+        this.isSaving.set(true);
+        const url = apiRoute + "/getParticipant";
+        const jsonBody = {
+            "conditions": [
+                `id = ${id}`
+            ]
+        }
+
+        let result = await this.doFetch(url, jsonBody, "POST");
+        if (result) {
+            this.id = result.json.id;
+        }
+    }
+
+    async updateParticipant() {
+
+    }
+
     async deleteParticipant() {
         this.isDeleting.set(true);
         const url = apiRoute + "/deleteParticipant";
         const jsonBody = {
-            "conditions": [
-                `id = ${this.id}`
-            ]
+            "id": this.id
         }
 
         let result = await this.doFetch(url, jsonBody, "POST");

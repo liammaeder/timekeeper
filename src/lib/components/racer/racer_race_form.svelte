@@ -1,15 +1,21 @@
 <script>
     //region imports
-    import Loader from '$lib/components/misc/Loader.svelte';
-    import racerCls from '$lib/class/racers/Racers.js';
-    import {onMount} from 'svelte';
-    import {createTrigger, isSavingStore} from "$lib/components/racer/racerStore.js";
+    import Loader                           from '$lib/components/misc/Loader.svelte';
+    import racerCls                         from '$lib/class/racers/Racers.js';
+    import {onDestroy, onMount} from 'svelte';
+    import {createTrigger, isSavingStore}   from "$lib/components/racer/racerStore.js";
+    import pageEvent                        from "$lib/class/helpers/PageEvent.js";
+    //endregion
 
-    let dataFetched = false;
-    let racer = new racerCls();
-    let isNewRacer = false;
+    //region export variables
     export let participantId;
     export let racerNum;
+    //endregion
+
+    //region local variables
+    let dataFetched             = false;
+    let racer                   = new racerCls();
+    let isNewRacer              = false;
     let racerList;
     let selectedRacer;
     let racerName;
@@ -88,12 +94,10 @@
                         <option value={racerOption.name}></option>
                     {/each}
                 </dataList>
-                <input type="text" name="name_search" id="name_search" list="racers" on:focusout={handleClick}
-                       class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                       placeholder=" " required/>
-                <label for="name_search"
-                       class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Racer
-                    Name</label>
+                <input type="text" name="name_search" id="name_search" list="racers" on:focusout={handleClick} class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="Search racer..." required/>
+                <label for="name_search" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                    Racer Name
+                </label>
             </div>
         </div>
     </form>
