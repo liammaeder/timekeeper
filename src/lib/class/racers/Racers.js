@@ -80,7 +80,9 @@ export default class Racers{
     async getAllRacers() {
         const url = apiRoute + "/getRacers";
         const jsonBody = {
-            "conditions":[],
+            "conditions":[
+                ""
+            ],
             "limit": this.limit,
             "offset": this.offset
         }

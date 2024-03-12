@@ -2,7 +2,6 @@
     //region imports
     import { onMount } from "svelte";
     import Swal from 'sweetalert2';
-    import 'animate.css';
     //endregion
 
     //region export variables
@@ -10,7 +9,7 @@
     export let toastPosition = 'bottom-end';
     export let toastTitle;
     export let toastMessage;
-    export let closeTimer = 5000;
+    export let closeTimer = 2000;
     //endregion
 
     //region local variables
@@ -35,6 +34,9 @@
             customClass: {
                 popup: 'colored-toast',
             },
+            showConfirmButton: false,
+            timer: closeTimer,
+            timerProgressBar: true,
             showClass: {
                 popup: `
               animate__animated
@@ -48,10 +50,7 @@
               animate__fadeOut
               animate__faster
             `
-            },
-            showConfirmButton: false,
-            timer: closeTimer,
-            timerProgressBar: true
+            }
         });
 
         Toast.fire({
