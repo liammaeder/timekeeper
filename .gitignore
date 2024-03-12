@@ -11,3 +11,11 @@ package-lock.json
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 /build/
+.idea/dataSources.local.xml
+.idea/dataSources.xml
+.idea/dataSources/1bf07236-9f9c-4e25-87da-64a6b313898f.xml
+.idea/dataSources/1bf07236-9f9c-4e25-87da-64a6b313898f/storage_v2/_src_/schema/information_schema.FNRwLQ.meta
+.idea/dataSources/1bf07236-9f9c-4e25-87da-64a6b313898f/storage_v2/_src_/schema/performance_schema.kIw0nw.meta
+.idea/dataSources/99e2387a-5eb1-4bcd-b195-c63489e43324.xml
+.idea/dataSources/99e2387a-5eb1-4bcd-b195-c63489e43324/storage_v2/_src_/schema/information_schema.FNRwLQ.meta
+.idea/dataSources/99e2387a-5eb1-4bcd-b195-c63489e43324/storage_v2/_src_/schema/performance_schema.kIw0nw.meta
