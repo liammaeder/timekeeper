@@ -6,7 +6,7 @@ export default class Participants {
         this.id = null;
         this.race = null;
         this.boatType = null;
-        this.racers = [];
+        this.racerLinks = [];
         this.isDeleting = writable(false);
         this.isSaving = writable(false);
         this.isLinking = writable(false);
@@ -40,6 +40,22 @@ export default class Participants {
         let result = await this.doFetch(url, jsonBody, "POST");
         if (result) {
             this.id = result.json.id;
+        }
+    }
+
+    async getParticipantLink() {
+        const url = apiRoute + "/getParticipantLink";
+        const jsonBody = {
+            "sonditions": [
+                `participant = ${this.id}`
+            ]
+        };
+
+        let result = await this.doFetch(url, jsonBody, "POST");
+        if (result) {
+            Object.entries(result.json).forEach((racerLink) => {
+                console.log(racerLink);
+            });
         }
     }
 

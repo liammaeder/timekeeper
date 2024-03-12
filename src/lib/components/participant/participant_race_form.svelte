@@ -35,7 +35,7 @@
         try {
             boatTypes = await partType.getTypes();
             if (participantId && participantId > 0) {
-                await getParticipant();
+                await getParticipantDetails();
             } else {
                 await createParticipant();
             }
