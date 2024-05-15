@@ -17,36 +17,33 @@ export default class Racers{
 
     async createRacer() {
         this.isSaving.set(true);
-        setTimeout(() => {
-            this.linkRacer();
-            // this.isSaving.set(false);
-        }, 2000);
-        // const url = apiRoute + "/createRacer";
-        // const jsonBody = {
-        //     "values": {
-        //         "name": this.name,
-        //         "csa": this.csa,
-        //         "user": this.user,
-        //     }
-        // }
-        //
-        // let result = await this.doFetch(url, jsonBody, "POST");
-        // this.isSaving.set(false);
-        // return result;
+        const url = apiRoute + "/createRacer";
+        const jsonBody = {
+            "values": {
+                "name": this.name,
+                "csa": this.csa,
+                "user": this.user,
+            }
+        }
+
+        let result = await this.doFetch(url, jsonBody, "POST");
+        this.isSaving.set(false);
+        return result;
     }
 
     async linkRacer() {
         this.isLinking.set(true);
-        setTimeout(() => {
-            this.isLinking.set(false);
-        }, 2000);
-        // const url = apiRoute + "/linkRacer";
-        // const jsonBody = {
-        //     "values": {
-        //         "racer": this.id,
-        //         "participant": this.participant
-        //     }
-        // }
+        const url = apiRoute + "/linkRacer";
+        const jsonBody = {
+            "values": {
+                "racer": this.id,
+                "participant": this.participant
+            }
+        }
+
+        let result = await this.doFetch(url, jsonBody, "POST");
+        this.isSaving.set(false);
+        return result;
     }
 
     async getRacer() {
@@ -80,11 +77,18 @@ export default class Racers{
     async getAllRacers() {
         const url = apiRoute + "/getRacers";
         const jsonBody = {
-            "conditions":[],
             "limit": this.limit,
             "offset": this.offset
         }
 
+        return await this.doFetch(url, jsonBody, "POST");
+    }
+
+    async getAllRacersNotInRace(raceId) {
+        const url = apiRoute + "/getRacersNotInRace";
+        const jsonBody = {
+            conditions: `p.race = ${raceId}`
+        };
         return await this.doFetch(url, jsonBody, "POST");
     }
 

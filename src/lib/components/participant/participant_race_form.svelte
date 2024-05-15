@@ -1,91 +1,124 @@
 <script>
     //region imports
-    import {writable} from 'svelte/store';
-    import {Label, Select} from 'flowbite-svelte';
+    import {writable}           from 'svelte/store';
+    import {Label, Select}      from 'flowbite-svelte';
     import {onDestroy, onMount} from "svelte";
-    import Loader from '$lib/components/misc/Loader.svelte';
-    import RacerRaceForm from "$lib/components/racer/racer_race_form.svelte";
-    import typeCls from "$lib/class/participants/ParticipantType.js";
-    import partCls from "$lib/class/participants/Participants.js";
-    import pageEvent from "$lib/class/helpers/PageEvent.js";
-    // import {
-    //     createTrigger as rTrigger,
-    //     isSavingStore as rIsSaving,
-    //     racerIds
-    // }                               from "$lib/components/racer/racerStore.js";
-    // import {
-    //     createTrigger as pTrigger,
-    //     isSavingStore as pIsSaving
-    // }                               from "$lib/components/racer/racerStore.js";
+    import Loader               from '$lib/components/misc/Loader.svelte';
+    import RacerRaceForm        from "$lib/components/racer/racer_race_form.svelte";
+    import typeCls              from "$lib/class/participants/ParticipantType.js";
+    import partCls              from "$lib/class/participants/Participants.js";
+    import pageEvent            from "$lib/class/helpers/PageEvent.js";
     //endregion
 
     //region exports
     export let raceId;
+    export let participantId;
     //endregion
 
     //region local variables
     let participant = new partCls();
-    let partType = new typeCls();
+    let partType    = new typeCls();
     let dataFetched = false;
+    let isEdit      = false;
     let createRacer = writable(false);
     let boatTypes;
 
     const handleEvent = data => {
-        console.log(data);
+        console.log("pageEvent triggered");
     };
     //endregion
 
     onMount(async () => {
         pageEvent.addPageEvent('participant_saved', handleEvent);
         pageEvent.addPageEvent('participant_deleted', handleEvent);
+        pageEvent.addPageEvent('boat_type_changed', handleEvent);
 
         try {
             boatTypes = await partType.getTypes();
-            await createParticipant();
+            if (participantId && participantId > 0) {
+                await getParticipantDetails();
+            } else {
+                await createParticipant();
+            }
             dataFetched = true;
         } catch (error) {
             console.error("Error occurred: ", error.message);
         }
-
-        async function createParticipant() {
-            participant.race = raceId;
-            let participantID = await participant.createParticipant();
-        }
     });
 
-    function updateParticipant() {
-        pageEvent.triggerEvent("button_clicked", handleEvent);
+    async function createParticipant() {
+        participant.race = raceId;
+        await participant.createParticipant();
     }
 
-    async function deleteParticipant() {
-        let result = await participant.deleteParticipant();
-        pageEvent.triggerEvent("participant_deleted", handleEvent);
+    async function getParticipantDetails() {
+        await participant.createParticipant();
+    }
+
+    async function boatTypeChanged(event) {
+        await participant.unlinkAllRacers();
+        pageEvent.triggerEvent("boat_type_changed", event);
+    }
+
+    //Not sure about this one yet
+    // async function getParticipantRacers() {
+    //
+    // }
+
+    function updateParticipant(event) {
+        pageEvent.triggerEvent("participant_saved", event);
+    }
+
+    async function deleteParticipant(event) {
+        await participant.deleteParticipant();
+        pageEvent.triggerEvent("participant_deleted", event);
     }
 
     onDestroy(() => {
         pageEvent.removePageEvent("participant_saved", handleEvent);
         pageEvent.removePageEvent("participant_deleted", handleEvent);
+        pageEvent.removePageEvent('boat_type_changed', handleEvent);
     });
 </script>
 
 {#if dataFetched}
-    <form class="w-full h-fit">
-        <div class="w-full group">
-            <Label for="select_type">Select boat type</Label>
-            <Select id="select_type" bind:value={participant.boatType} class="mt-2">
-                <option selected>Choose a type</option>
-                {#each boatTypes as type}
-                    <option value={type.id}>{type.name}</option>
-                {/each}
-            </Select>
-        </div>
+    {#if !isEdit}
+        <form class="w-full h-fit">
+            <div class="w-full group">
+                <Label for="select_type">Select boat type</Label>
+                <Select id="select_type" on:change={boatTypeChanged} bind:value={participant.boatType} class="mt-2">
+                    <option selected>Choose a type</option>
+                    {#each boatTypes as type}
+                        <option value={type.id}>{type.name}</option>
+                    {/each}
+                </Select>
+            </div>
 
-        {#if participant.boatType}
-            {#each Array.from({length: participant.boatType}) as participant, i}
-                <RacerRaceForm createRacer={createRacer} racerNum={i + 1} participantId={participant.id}/>
-            {/each}
-        {/if}
-    </form>
+            {#if participant.boatType}
+                {#each Array.from({length: participant.boatType}) as boat, i}
+                    <RacerRaceForm createRacer={createRacer} racerNum={i + 1} participantId={participant.id} raceId={raceId} />
+                {/each}
+            {/if}
+        </form>
+    {:else}
+        <form class="w-full h-fit">
+            <div class="w-full group">
+                <Label for="select_type">Select boat type</Label>
+                <Select id="select_type" on:change={boatTypeChanged} bind:value={participant.boatType} class="mt-2">
+                    <option selected>Choose a type</option>
+                    {#each boatTypes as type}
+                        <option value={type.id}>{type.name}</option>
+                    {/each}
+                </Select>
+            </div>
+
+            {#if participant.boatType}
+                {#each Array.from({length: participant.boatType}) as boat, i}
+                    <RacerRaceForm createRacer={createRacer} racerNum={i + 1} participantId={participant.id} raceId={raceId} />
+                {/each}
+            {/if}
+        </form>
+    {/if}
     <!-- Modal footer -->
     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
         <button on:click={updateParticipant} type="button"

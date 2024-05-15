@@ -1,18 +1,24 @@
 <script>
     //region imports
-    import Loader from '$lib/components/misc/Loader.svelte';
-    import racerCls from '$lib/class/racers/Racers.js';
-    import {onMount} from 'svelte';
-    import {createTrigger, isSavingStore} from "$lib/components/racer/racerStore.js";
+    import Loader                               from '$lib/components/misc/Loader.svelte';
+    import racerCls                             from '$lib/class/racers/Racers.js';
+    import { onDestroy, onMount }               from 'svelte';
+    import { createTrigger, isSavingStore }     from "$lib/components/racer/racerStore.js";
+    import SearchableDropdown                   from "$lib/components/fields/SearchableDropdown.svelte";
+    import pageEvent                            from "$lib/class/helpers/PageEvent.js";
+    //endregion
 
-    let dataFetched = false;
-    let racer = new racerCls();
-    let isNewRacer = false;
+    //region export variables
     export let participantId;
+    export let raceId;
     export let racerNum;
-    let racerList;
-    let selectedRacer;
-    let racerName;
+    export let racerList;
+    //endregion
+
+    //region local variables
+    let dataFetched             = false;
+    let racer                   = new racerCls();
+    let isNewRacer              = true;
     let racerCSA;
     //endregion
 
@@ -33,11 +39,14 @@
     //endregion
 
     onMount(async () => {
-        try {
-            racer.limit = 999999999;
-            racerList = await racer.getAllRacers();
+        pageEvent.addPageEvent('racer_selected', updateRacerList);
 
-            if (racerList && racerList.length > 0) {
+        try {
+            racer.participant = participantId;
+            racer.limit = 9999999999;
+            racerList = await racer.getAllRacersNotInRace(raceId);
+
+            if (racerList) {
                 dataFetched = true;
             }
         } catch (error) {
@@ -45,10 +54,23 @@
         }
     });
 
-    async function racerCreate() {
+    function updateRacerList(event) {
+        let id;
+        if (event.detail) {
+            id = event.detail.id
+        } else {
+            id = racer.id
+        }
+        console.log(event);
+        console.log(racer.id);
+        console.log(id);
+        racerList = racerList.filter(item => item.id !== id);
+    }
+
+    async function racerCreate(event) {
         racer = new racerCls();
         racer.participant = participantId;
-        racer.name = racerName;
+        racer.name = event.detail.racerName;
         racer.csa = racerCSA;
         let result = await racer.createRacer();
 
@@ -58,42 +80,28 @@
         }
     }
 
-    async function racerLink() {
+    async function racerLink(event) {
+        console.log(event);
+        if (event) {
+            pageEvent.triggerEvent("racer_selected", event);
+            racer.id = event.detail.id;
+        } else {
+            pageEvent.triggerEvent("racer_selected", {id: racer.id});
+        }
         await racer.linkRacer();
     }
 
-    const handleClick = (event) => {
-        selectedRacer = racerList.find((racerItem) => event.target.value === racerItem.name);
-
-        if (selectedRacer) {
-            isNewRacer = false;
-            racer.id = selectedRacer.id;
-            racer.name = selectedRacer.name;
-            racer.csa = selectedRacer.csa;
-        } else {
-            isNewRacer - true;
-            racerName = event.target.value;
-            racerCSA = null;
-        }
-    }
+    onDestroy(() => {
+        pageEvent.removePageEvent('racer_selected', updateRacerList);
+    })
 </script>
 
 {#if dataFetched}
     <form>
         <div class="h-fit grid grid-cols-12 mt-2">
-            <h5 class="text-sm m-auto w-full col-span-4 md:col-span-2 lg:col-span-1 font-bold">Racer #{racerNum}</h5>
-            <div class="relative z-0 my-2 mx-auto w-full col-span-8 md:col-span-10 lg:col-span-11 group">
-                <dataList id="racers">
-                    {#each racerList as racerOption}
-                        <option value={racerOption.name}></option>
-                    {/each}
-                </dataList>
-                <input type="text" name="name_search" id="name_search" list="racers" on:focusout={handleClick}
-                       class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                       placeholder=" " required/>
-                <label for="name_search"
-                       class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Racer
-                    Name</label>
+            <h5 class="text-sm m-auto w-full col-span-12 md:col-span-2 lg:col-span-1  font-bold">Racer #{racerNum}</h5>
+            <div class="my-2 mx-auto w-full col-span-12 md:col-span-10 lg:col-span-11 group">
+                <SearchableDropdown listData={racerList} on:racerCreated={racerCreate} on:racerSelected={racerLink}/>
             </div>
         </div>
     </form>

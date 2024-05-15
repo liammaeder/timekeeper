@@ -1,38 +1,43 @@
 <script>
     //region imports
-    import ParticipantForm  from "$lib/components/participant/participant_race_form.svelte";
-    import raceCls          from "$lib/class/race/Race.js";
-    import Modal            from "$lib/components/misc/Modal.svelte";
-    import Loader           from '$lib/components/misc/Loader.svelte';
-    import { onMount }      from "svelte";
-    import pageEvent        from "$lib/class/helpers/PageEvent.js";
-    import ConfirmAlert     from "$lib/components/alerts/AlertConfirm.svelte";
-    import Alert            from "$lib/components/alerts/AlertMessage.svelte";
-    import Toast            from "$lib/components/toast/Toast.svelte";
-    import { browser }      from "$app/environment";
-    import UrlController    from "$lib/class/helpers/Url.js";
-    import { goto }         from "$app/navigation";
+    import ParticipantForm      from "$lib/components/participant/participant_race_form.svelte";
+    import raceCls              from "$lib/class/race/Race.js";
+    import Modal                from "$lib/components/misc/Modal.svelte";
+    import Loader               from '$lib/components/misc/Loader.svelte';
+    import {onDestroy, onMount} from "svelte";
+    import pageEvent            from "$lib/class/helpers/PageEvent.js";
+    import ConfirmAlert         from "$lib/components/alerts/AlertConfirm.svelte";
+    import Alert                from "$lib/components/alerts/AlertMessage.svelte";
+    import Toast                from "$lib/components/toast/Toast.svelte";
+    import { browser }          from "$app/environment";
+    import UrlController        from "$lib/class/helpers/Url.js";
+    import { goto }             from "$app/navigation";
     //endregion
 
     //region export variables
     //endregion
 
     //region local variables
-    let race                    = new raceCls();
+    let race                            = new raceCls();
+    let isParticipantModalOpen          = false;
+    let dataFetched                     = false;
+    let participants                    = [];
+    let showConfirmCancel               = false;
+    let showConfirmDelete               = false;
+    let showRaceSaveSuccess             = false;
+    let showRaceSaveFail                = false;
+    let raceSaveError                   = "";
+    let showDeleteSuccess               = false;
+    let showDeleteFail                  = false;
+    let deleteError                     = "";
+    let showConfirmDeleteParticipant    = false;
+    let showParticipantDeleteSuccess    = false;
+    let showParticipantDeleteFail       = false;
+    let participantDeleteError          = "";
+    let noRaceFound                     = false;
+    let noParticipantsFound             = false;
+    let deleteParticipantId;
     let raceId;
-    let isParticipantModalOpen  = false;
-    let dataFetched             = false;
-    let participants            = [];
-    let showConfirmCancel       = false;
-    let showConfirmDelete       = false;
-    let showRaceSaveSuccess     = false;
-    let showRaceSaveFail        = false;
-    let raceSaveError           = "";
-    let showDeleteSuccess       = false;
-    let showDeleteFail          = false;
-    let deleteError             = "";
-    let noRaceFound             = false;
-    let noParticipantsFound     = false;
     //endregion
 
     onMount(async () => {
@@ -58,8 +63,9 @@
         dataFetched = true;
     });
 
-    function onParticipantDeleted() {
+    async function onParticipantDeleted() {
         closeParticipantModal();
+        await getRaceDetails();
     }
 
     async function onParticipantSaved() {
@@ -99,9 +105,15 @@
         showConfirmDelete = true;
     }
 
+    function openConfirmDeleteParticipant(id) {
+        deleteParticipantId = id;
+        showConfirmDeleteParticipant = true;
+    }
+
     function closeConfirm() {
         showConfirmCancel = false;
         showConfirmDelete = false;
+        showConfirmDeleteParticipant = false;
     }
 
     async function confirmDelete() {
@@ -129,6 +141,23 @@
         noParticipantsFound = participants.length <= 0;
     }
 
+    async function deleteParticipant() {
+        try {
+            let result = await race.deleteRaceParticipant(deleteParticipantId);
+            if (result && result.affectedRows > 0) {
+                showParticipantDeleteSuccess = true;
+                setTimeout(() => {
+                    showParticipantDeleteSuccess = false;
+                }, 3000)
+                await getRaceDetails();
+            }
+        } catch (error) {
+            participantDeleteError = error.message;
+            showParticipantDeleteFail = true;
+        }
+        closeConfirm()
+    }
+
     function openParticipantModal() {
         isParticipantModalOpen = true;
     }
@@ -136,16 +165,21 @@
     function closeParticipantModal() {
         isParticipantModalOpen = false;
     }
+
+    onDestroy(() => {
+        pageEvent.removePageEvent("participant_saved", closeParticipantModal);
+        pageEvent.removePageEvent("participant_deleted", closeParticipantModal);
+    });
 </script>
 
 {#if dataFetched}
     {#if !noRaceFound}
-        <div class="w-full mx-auto mb-2 px-2 py-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div class="w-full mx-auto mb-2 p-3 border border-gray-200 rounded-lg shadow dark:border-gray-700">
             <div class="w-full mb-2 grid grid-cols-12">
-                <p class="col-span-10 sm:col-span-6 md:col-span-8 text-xl font-bold text-black dark:text-white">Race Details</p>
-                <div class="col-span-2 sm:col-span-6 md:col-span-4 flex justify-end">
-                    <button on:click={openConfirmDelete} type="button" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm p-2 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
-                        <i class="fa-regular fa-trash-can"></i>
+                <p class="col-span-6 md:col-span-8 text-xl font-bold text-black dark:text-white">Race Details</p>
+                <div class="col-span-6 md:col-span-4 text-right">
+                    <button on:click={openConfirmDelete} type="button" class="text-sm max-h-[25px] text-red-700 hover:text-red-800 rounded-full text-center dark:text-red-500 dark:hover:text-red-600 ">
+                        <i class="fa-regular fa-trash-can"></i>&nbsp;Delete Race
                     </button>
                 </div>
             </div>
@@ -173,24 +207,32 @@
                 </div>
             </div>
         </div>
-        <div class="w-full mx-auto mb-2 px-2 py-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div class="w-full mx-auto mb-2 p-3 border border-gray-200 rounded-lg shadow dark:border-gray-700">
             <div class="w-full mb-2">
                 <p class="text-xl font-bold text-black dark:text-white">Participant Details</p>
             </div>
             {#if !noParticipantsFound}
-                <ul class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
+                <ul class="w-full divide-y divide-gray-200 dark:divide-gray-700">
                     {#each participants as participantRow, index (index)}
-                        <li class="pb-3 sm:pb-4">
-                            <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                                <div class="flex-shrink-0">
+                        <li class="py-1 sm:pt-2">
+                            <div class="grid grid-cols-12 items-center ">
+                                <div class="col-span-1">
                                     {index + 1} -
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    {#if participantRow.boatType}
-                                        {participantRow.boatType}
-                                    {:else}
-                                        Boat Type not specified
+                                <div class="col-span-7 sm:col-span-9">
+                                    {#if participantRow.id}
+                                        {JSON.parse(participantRow.racers).map((racer) => `${racer}`).join(', ')}
                                     {/if}
+                                </div>
+                                <div class="col-span-4 sm:col-span-2 text-right">
+                                    <button class="btn btn-square btn-sm btn-primary mx-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                        </svg>
+                                    </button>
+                                    <button on:click={() => openConfirmDeleteParticipant(participantRow.id)} class="text-red-700 text-sm hover:text-red-800 dark:text-red-600 dark:hover:text-red-700 text-center mx-1">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
                                 </div>
                             </div>
                         </li>
@@ -207,18 +249,18 @@
                 </button>
             </div>
         </div>
-        <div class="grid grid-cols-2 w-full mx-auto mb-2 px-2 py-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-        <div class="w-full">
-            <button on:click={saveRaceDetails} type="button" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                Save
-            </button>
+        <div class="grid grid-cols-2 w-full mx-auto mb-2 px-2 py-3 border border-gray-200 rounded-lg shadow dark:border-gray-700">
+            <div class="w-full">
+                <button on:click={saveRaceDetails} type="button" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    Save
+                </button>
+            </div>
+            <div class="w-full">
+                <button on:click={openConfirmCancel} type="button" class="w-full ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                    Cancel
+                </button>
+            </div>
         </div>
-        <div class="w-full">
-            <button on:click={openConfirmCancel} type="button" class="w-full ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                Cancel
-            </button>
-        </div>
-    </div>
     {:else}
         <div class="w-full mx-auto mb-2 px-2 py-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <p>No race was found with id of {raceId}</p>
@@ -228,32 +270,46 @@
     <Loader/>
 {/if}
 
-<Modal isOpen={isParticipantModalOpen} onClose={closeParticipantModal} title="Create Participant">
-    <div class="p-4">
-        <ParticipantForm raceId={race.id}/>
-    </div>
-</Modal>
+<div id="popups-div">
+    <Modal isOpen={isParticipantModalOpen} onClose={closeParticipantModal} title="Create Participant">
+        <div class="p-4">
+            <ParticipantForm raceId={race.id}/>
+        </div>
+    </Modal>
 
-{#if showRaceSaveSuccess}
-    <Toast icon={'success'} toastMessage={'Saved successfully!'} />
-{/if}
+    {#if showRaceSaveSuccess}
+        <Toast icon={'success'} toastMessage={'Saved successfully!'} />
+    {/if}
 
-{#if showRaceSaveFail}
-    <Alert autoClose={true} icon={'error'} alertTitle={'Error saving Race...'} alertMessage={raceSaveError} />
-{/if}
+    {#if showRaceSaveFail}
+        <Alert autoClose={true} icon={'error'} alertTitle={'Error saving Race...'} alertMessage={raceSaveError} />
+    {/if}
 
-{#if showDeleteSuccess}
-    <Toast icon={'success'} toastMessage={'Race deleted successfully!'} />
-{/if}
+    {#if showDeleteSuccess}
+        <Toast icon={'success'} toastMessage={'Race deleted successfully!'} />
+    {/if}
 
-{#if showDeleteFail}
-    <Alert icon={'error'} alertTitle={'Error deleting Race...'} alertMessage={deleteError} />
-{/if}
+    {#if showDeleteFail}
+        <Alert icon={'error'} alertTitle={'Error deleting Race...'} alertMessage={deleteError} />
+    {/if}
 
-{#if showConfirmCancel}
-    <ConfirmAlert icon={'warning'} alertTitle={'Careful!'} alertMessage={'Any unsaved changes will be lost! Do you want to continue?'} confirm={confirmCancel} cancel={closeConfirm} />
-{/if}
+    {#if showParticipantDeleteSuccess}
+        <Toast icon={'success'} toastMessage={'Participant deleted successfully!'} />
+    {/if}
 
-{#if showConfirmDelete}
-    <ConfirmAlert icon={'warning'} alertTitle={'Are you sure?'} alertMessage={'This will delete the race, are you sure?'} confirm={confirmDelete} cancel={closeConfirm} />
-{/if}
+    {#if showParticipantDeleteFail}
+        <Alert icon={'error'} alertTitle={'Error deleting Participant...'} alertMessage={participantDeleteError} />
+    {/if}
+
+    {#if showConfirmCancel}
+        <ConfirmAlert icon={'warning'} alertTitle={'Careful!'} alertMessage={'Any unsaved changes will be lost! Do you want to continue?'} confirm={confirmCancel} cancel={closeConfirm} />
+    {/if}
+
+    {#if showConfirmDelete}
+        <ConfirmAlert icon={'warning'} alertTitle={'Are you sure?'} alertMessage={'This will delete the race.'} confirm={confirmDelete} cancel={closeConfirm} />
+    {/if}
+
+    {#if showConfirmDeleteParticipant}
+        <ConfirmAlert icon={'warning'} alertTitle={'Are you sure?'} alertMessage={'This will delete the participant.'} confirm={deleteParticipant} cancel={closeConfirm} />
+    {/if}
+</div>

@@ -4,12 +4,12 @@ class PageEvent {
         this.listeners = [];
 
         // Function to trigger an event
-        this.triggerEvent = (eventName, data) => {
+        this.triggerEvent = (eventName, event) => {
             const eventListeners = this.listeners.find(item => item.eventName === eventName);
 
             if (eventListeners) {
                 eventListeners.callbacks.forEach(callback => {
-                    callback(data);
+                    callback(event);
                 });
             }
         };

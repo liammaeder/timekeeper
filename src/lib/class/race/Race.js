@@ -85,6 +85,12 @@ class Race{
         return await this.doFetch(url, jsonBody, 'POST');
     }
 
+    async deleteRaceParticipant(id) {
+        const url = import.meta.env.VITE_API_URL + "participant/deleteParticipant";
+        let jsonBody = {id: id}
+        return await this.doFetch(url, jsonBody, 'POST');
+    }
+
     async getRaceWithRacers(raceId) {
         const url = apiRoute + "/getRace";
         const jsonBody = {

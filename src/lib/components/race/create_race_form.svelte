@@ -1,7 +1,7 @@
 <script>
     //region imports
     import ConfirmAlert from "$lib/components/alerts/AlertConfirm.svelte";
-    import SuccessAlert from "$lib/components/alerts/AlertMessage.svelte";
+    import SuccessAlert from "$lib/components/toast/Toast.svelte";
     import raceCls      from "$lib/class/race/Race.js";
     import { goto }     from '$app/navigation';
     import { onMount }  from "svelte";
@@ -72,5 +72,5 @@
 {/if}
 
 {#if showSuccess}
-    <SuccessAlert autoClose={true} icon={'success'} alertMessage={'Saved successfully!'} />
+    <SuccessAlert icon={'success'} toastMessage={'Saved successfully'} />
 {/if}
