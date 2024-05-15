@@ -1,13 +1,13 @@
 <script>
     //region imports
-    import {writable} from 'svelte/store';
-    import {Label, Select} from 'flowbite-svelte';
+    import {writable}           from 'svelte/store';
+    import {Label, Select}      from 'flowbite-svelte';
     import {onDestroy, onMount} from "svelte";
-    import Loader from '$lib/components/misc/Loader.svelte';
-    import RacerRaceForm from "$lib/components/racer/racer_race_form.svelte";
-    import typeCls from "$lib/class/participants/ParticipantType.js";
-    import partCls from "$lib/class/participants/Participants.js";
-    import pageEvent from "$lib/class/helpers/PageEvent.js";
+    import Loader               from '$lib/components/misc/Loader.svelte';
+    import RacerRaceForm        from "$lib/components/racer/racer_race_form.svelte";
+    import typeCls              from "$lib/class/participants/ParticipantType.js";
+    import partCls              from "$lib/class/participants/Participants.js";
+    import pageEvent            from "$lib/class/helpers/PageEvent.js";
     //endregion
 
     //region exports
@@ -24,13 +24,14 @@
     let boatTypes;
 
     const handleEvent = data => {
-        console.log(data);
+        console.log("pageEvent triggered");
     };
     //endregion
 
     onMount(async () => {
         pageEvent.addPageEvent('participant_saved', handleEvent);
         pageEvent.addPageEvent('participant_deleted', handleEvent);
+        pageEvent.addPageEvent('boat_type_changed', handleEvent);
 
         try {
             boatTypes = await partType.getTypes();
@@ -54,23 +55,29 @@
         await participant.createParticipant();
     }
 
-    async function getParticipantRacers() {
-
+    async function boatTypeChanged(event) {
+        await participant.unlinkAllRacers();
+        pageEvent.triggerEvent("boat_type_changed", event);
     }
+
+    //Not sure about this one yet
+    // async function getParticipantRacers() {
+    //
+    // }
 
     function updateParticipant(event) {
         pageEvent.triggerEvent("participant_saved", event);
     }
 
     async function deleteParticipant(event) {
-        let result = await participant.deleteParticipant();
-        console.log(result);
+        await participant.deleteParticipant();
         pageEvent.triggerEvent("participant_deleted", event);
     }
 
     onDestroy(() => {
         pageEvent.removePageEvent("participant_saved", handleEvent);
         pageEvent.removePageEvent("participant_deleted", handleEvent);
+        pageEvent.removePageEvent('boat_type_changed', handleEvent);
     });
 </script>
 
@@ -79,7 +86,7 @@
         <form class="w-full h-fit">
             <div class="w-full group">
                 <Label for="select_type">Select boat type</Label>
-                <Select id="select_type" bind:value={participant.boatType} class="mt-2">
+                <Select id="select_type" on:change={boatTypeChanged} bind:value={participant.boatType} class="mt-2">
                     <option selected>Choose a type</option>
                     {#each boatTypes as type}
                         <option value={type.id}>{type.name}</option>
@@ -89,7 +96,7 @@
 
             {#if participant.boatType}
                 {#each Array.from({length: participant.boatType}) as boat, i}
-                    <RacerRaceForm createRacer={createRacer} racerNum={i + 1} participantId={participant.id}/>
+                    <RacerRaceForm createRacer={createRacer} racerNum={i + 1} participantId={participant.id} raceId={raceId} />
                 {/each}
             {/if}
         </form>
@@ -97,7 +104,7 @@
         <form class="w-full h-fit">
             <div class="w-full group">
                 <Label for="select_type">Select boat type</Label>
-                <Select id="select_type" bind:value={participant.boatType} class="mt-2">
+                <Select id="select_type" on:change={boatTypeChanged} bind:value={participant.boatType} class="mt-2">
                     <option selected>Choose a type</option>
                     {#each boatTypes as type}
                         <option value={type.id}>{type.name}</option>
@@ -107,7 +114,7 @@
 
             {#if participant.boatType}
                 {#each Array.from({length: participant.boatType}) as boat, i}
-                    <RacerRaceForm createRacer={createRacer} racerNum={i + 1} participantId={participant.id}/>
+                    <RacerRaceForm createRacer={createRacer} racerNum={i + 1} participantId={participant.id} raceId={raceId} />
                 {/each}
             {/if}
         </form>

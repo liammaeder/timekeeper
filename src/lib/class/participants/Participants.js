@@ -78,6 +78,19 @@ export default class Participants {
         return result.insertId;
     }
 
+    async unlinkAllRacers() {
+        this.isSaving.set(true);
+        const url = apiRoute + "/unlinkAllRacers";
+        const jsonBody = {
+            "id": this.id
+        }
+
+        let result = await this.doFetch(url, jsonBody, "POST");
+        if(result) {
+            this.isSaving.set(false);
+        }
+    }
+
     async doFetch(url, jsonBody, method) {
         const response = await fetch(url, {
             method: method,

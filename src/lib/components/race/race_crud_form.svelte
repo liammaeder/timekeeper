@@ -147,7 +147,7 @@
             if (result && result.affectedRows > 0) {
                 showParticipantDeleteSuccess = true;
                 setTimeout(() => {
-                    showDeleteSuccess = false;
+                    showParticipantDeleteSuccess = false;
                 }, 3000)
                 await getRaceDetails();
             }
@@ -155,6 +155,7 @@
             participantDeleteError = error.message;
             showParticipantDeleteFail = true;
         }
+        closeConfirm()
     }
 
     function openParticipantModal() {
@@ -219,10 +220,8 @@
                                     {index + 1} -
                                 </div>
                                 <div class="col-span-7 sm:col-span-9">
-                                    {#if participantRow.boatType}
-                                        {participantRow.boatType}
-                                    {:else}
-                                        Boat Type not specified
+                                    {#if participantRow.id}
+                                        {JSON.parse(participantRow.racers).map((racer) => `${racer}`).join(', ')}
                                     {/if}
                                 </div>
                                 <div class="col-span-4 sm:col-span-2 text-right">
