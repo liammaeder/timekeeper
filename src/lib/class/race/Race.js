@@ -158,6 +158,7 @@ class Race{
     }
 
     async doFetch(url, jsonBody, method = "POST") {
+        console.log(url);
         const response = await fetch(url, {
             method: method,
             headers: {
