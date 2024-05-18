@@ -40,7 +40,9 @@
     //endregion
 
     onMount(async () => {
-        pageEvent.addPageEvent('racer_selected', updateRacerList);
+        pageEvent.addPageEvent('racer_select', updateRacerList);
+        pageEvent.addPageEvent('racer_selected', racerLink);
+        pageEvent.addPageEvent('racer_created', racerCreate);
 
         try {
             racer.participant = participantId;
@@ -84,17 +86,20 @@
     }
 
     async function racerLink(event) {
+        console.log(event);
         if (event) {
-            pageEvent.triggerEvent("racer_selected", event);
-            racer.id = event.detail.id;
+            pageEvent.triggerEvent("racer_select", event);
+            racer.id = event.newId;
         } else {
-            pageEvent.triggerEvent("racer_selected", {id: racer.id});
+            pageEvent.triggerEvent("racer_select", {id: racer.id});
         }
         await racer.linkRacer();
     }
 
     onDestroy(() => {
-        pageEvent.removePageEvent('racer_selected', updateRacerList);
+        pageEvent.removePageEvent('racer_select', updateRacerList);
+        pageEvent.removePageEvent('racer_selected', racerLink);
+        pageEvent.removePageEvent('racer_created', racerCreate);
     })
 </script>
 
@@ -104,7 +109,7 @@
             <div class="h-fit grid grid-cols-12 mt-2">
                 <h5 class="text-sm m-auto w-full col-span-12 md:col-span-2 lg:col-span-1  font-bold">Racer #{racerNum}</h5>
                 <div class="my-2 mx-auto w-full col-span-12 md:col-span-10 lg:col-span-11 group">
-                    <SearchableDropdown field={field} listData={racerList} on:racerCreated={racerCreate} on:racerSelected={racerLink} racerId={racer.id} />
+                    <SearchableDropdown field={field} listData={racerList} racerId={racer.id} />
                 </div>
             </div>
         </form>

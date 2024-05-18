@@ -65,12 +65,14 @@
 
     function handleFieldValidation(event) {
         validation[`field${event.fieldId}`] = event.isValid;
+        console.log("field validated")
     }
 
     function validateForm() {
         let formValidation = true;
 
         Object.values(validation).forEach((value) => {
+            console.log(value);
             if (!value) {
                 formValidation = false;
             }
@@ -90,6 +92,7 @@
 
     async function boatTypeChanged(event) {
         await participant.unlinkAllRacers();
+        initializeFields();
         handleFieldValidation({fieldId: participant.boatType + 1, isValid: true});
         fieldValidation = true;
         isInteracted = true;
@@ -117,7 +120,7 @@
         pageEvent.removePageEvent("participant_deleted", handleEvent);
         pageEvent.removePageEvent('boat_type_changed', handleEvent);
         pageEvent.removePageEvent('save_clicked', handleEvent);
-        pageEvent.addPageEvent('field_validated', handleFieldValidation);
+        pageEvent.removePageEvent('field_validated', handleFieldValidation);
     });
 </script>
 

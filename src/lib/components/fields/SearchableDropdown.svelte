@@ -1,8 +1,8 @@
 <script>
     //region imports
-    import {createEventDispatcher, onDestroy, onMount} from "svelte";
-    import pageEvent from "$lib/class/helpers/PageEvent.js";
-    import Icon from "@iconify/svelte";
+    import { onDestroy, onMount }   from "svelte";
+    import pageEvent                from "$lib/class/helpers/PageEvent.js";
+    import Icon                     from "@iconify/svelte";
     //endregion
 
     //region export variables
@@ -24,11 +24,11 @@
     let validationMessage = 'Please create or select a racer.';
     //endregion
 
-    const dispatch = createEventDispatcher();
-
     onMount(() => {
         pageEvent.addPageEvent('boat_type_changed', removeRacer);
         pageEvent.addPageEvent('field_validated', genericHandler);
+        pageEvent.addPageEvent('racer_selected', genericHandler);
+        pageEvent.addPageEvent('racer_created', genericHandler);
 
         setInterval(() => {
             showFilteredList = filteredItems.length > 0 && filterMatch === true;
@@ -50,7 +50,6 @@
 
     function hideDropdownList() {
         setInterval(() => {
-            validateField();
             showList = false;
         }, 300);
     }
@@ -69,7 +68,7 @@
     function RacerCreated() {
         showCreatedButton = true;
         showCreateButton = false;
-        dispatch('racerCreated', {name: racerName, prevRacer: racerId});
+        pageEvent.triggerEvent('racer_created', {name: racerName, prevRacer: racerId});
         validateField();
     }
 
@@ -77,15 +76,17 @@
         showCreateButton = false;
         showCreatedButton = false;
         showList = false;
-        racerName = racer.name;
-        validateField();
         let id = racer.id;
-        dispatch('racerSelected', {newId: id, prevRacer: racerId});
+        racerName = racer.name;
+        pageEvent.triggerEvent('racer_selected', {newId: id, prevRacer: racerId});
+        validateField();
     }
 
     onDestroy(() => {
         pageEvent.removePageEvent('boat_type_changed', removeRacer);
         pageEvent.removePageEvent('field_validated', genericHandler);
+        pageEvent.removePageEvent('racer_selected', genericHandler);
+        pageEvent.removePageEvent('racer_created', genericHandler);
     })
 </script>
 
@@ -95,20 +96,7 @@
 <div>
     <div class="w-full grid grid-cols-12 gap-2 pl-0 pr-5">
         <div class="col-span-8 md:col-span-10 lg:col-span-10">
-            <input
-                    on:focus={showDropdownList}
-                    on:input={validateField}
-                    on:focusout={hideDropdownList}
-                    on:keyup={searchRacer}
-                    bind:value={racerName}
-                    type="text"
-                    placeholder="Search/Create Racer...."
-                    autocomplete="off"
-                    id="SearchInput"
-                    class="block py-2.5 w-full dark:placeholder-gray-400 text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-white focus:outline-none focus:ring-0
-                            focus:border-blue-600 {!fieldValidation && isInteracted ? 'dark:placeholder-red-300 placeholder-red-600 border-red-600 focus:border-red-600 dark:focus:border-red-500' :
-                            'border-gray-300 dark:border-gray-600 dark:focus:border-blue-500'}"
-            >
+            <input on:focus={showDropdownList} on:focusout={hideDropdownList} on:keyup={searchRacer} bind:value={racerName} type="text" placeholder="Search/Create Racer...." autocomplete="off" id="SearchInput" class="block py-2.5 w-full dark:placeholder-gray-400 text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-white focus:outline-none focus:ring-0 focus:border-blue-600 {!fieldValidation && isInteracted ? 'dark:placeholder-red-300 placeholder-red-600 border-red-600 focus:border-red-600 dark:focus:border-red-500' : 'border-gray-300 dark:border-gray-600 dark:focus:border-blue-500'}">
             {#if !fieldValidation && isInteracted}
                 <p class="mt-2 w-fit border px-2 rounded border-red-600 text-red-300 text-sm">
                     {validationMessage}
