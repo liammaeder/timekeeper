@@ -38,6 +38,7 @@
     let noParticipantsFound             = false;
     let deleteParticipantId;
     let raceId;
+    let participantId = -1;
     //endregion
 
     onMount(async () => {
@@ -273,7 +274,7 @@
 <div id="popups-div">
     <Modal isOpen={isParticipantModalOpen} onClose={closeParticipantModal} title="Create Participant">
         <div class="p-4">
-            <ParticipantForm raceId={race.id}/>
+            <ParticipantForm raceId={race.id} participantId={participantId}/>
         </div>
     </Modal>
 

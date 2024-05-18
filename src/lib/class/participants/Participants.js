@@ -5,11 +5,9 @@ export default class Participants {
     constructor() {
         this.id = null;
         this.race = null;
-        this.boatType = null;
-        this.racerLinks = [];
+        this.boatType = 0;
         this.isDeleting = writable(false);
         this.isSaving = writable(false);
-        this.isLinking = writable(false);
     }
 
     async createParticipant() {
@@ -40,6 +38,8 @@ export default class Participants {
         let result = await this.doFetch(url, jsonBody, "POST");
         if (result) {
             this.id = result.json.id;
+            this.race = result.json.race;
+            this.boatType = result.json.type;
         }
     }
 
