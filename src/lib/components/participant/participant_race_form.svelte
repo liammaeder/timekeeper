@@ -1,18 +1,20 @@
 <script>
     //region imports
-    import {writable}           from 'svelte/store';
-    import {Label, Select}      from 'flowbite-svelte';
-    import {onDestroy, onMount} from "svelte";
-    import Loader               from '$lib/components/misc/Loader.svelte';
-    import RacerRaceForm        from "$lib/components/racer/racer_race_form.svelte";
-    import typeCls              from "$lib/class/participants/ParticipantType.js";
-    import partCls              from "$lib/class/participants/Participants.js";
-    import pageEvent            from "$lib/class/helpers/PageEvent.js";
+    import { writable }             from 'svelte/store';
+    import {Label, Select}          from 'flowbite-svelte';
+    import { onDestroy, onMount }   from "svelte";
+    import Loader                   from '$lib/components/misc/Loader.svelte';
+    import RacerRaceForm            from "$lib/components/racer/racer_race_form.svelte";
+    import typeCls                  from "$lib/class/participants/ParticipantType.js";
+    import partCls                  from "$lib/class/participants/Participants.js";
+    import pageEvent                from "$lib/class/helpers/PageEvent.js";
     //endregion
 
     //region exports
     export let raceId;
     export let participantId;
+
+    export let isEditable = false;
     //endregion
 
     //region local variables

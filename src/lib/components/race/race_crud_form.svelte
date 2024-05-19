@@ -1,17 +1,17 @@
 <script>
     //region imports
-    import ParticipantForm      from "$lib/components/participant/participant_race_form.svelte";
-    import raceCls              from "$lib/class/race/Race.js";
-    import Modal                from "$lib/components/misc/Modal.svelte";
-    import Loader               from '$lib/components/misc/Loader.svelte';
-    import {onDestroy, onMount} from "svelte";
-    import pageEvent            from "$lib/class/helpers/PageEvent.js";
-    import ConfirmAlert         from "$lib/components/alerts/AlertConfirm.svelte";
-    import Alert                from "$lib/components/alerts/AlertMessage.svelte";
-    import Toast                from "$lib/components/toast/Toast.svelte";
-    import { browser }          from "$app/environment";
-    import UrlController        from "$lib/class/helpers/Url.js";
-    import { goto }             from "$app/navigation";
+    import ParticipantForm          from "$lib/components/participant/participant_race_form.svelte";
+    import raceCls                  from "$lib/class/race/Race.js";
+    import Modal                    from "$lib/components/misc/Modal.svelte";
+    import Loader                   from '$lib/components/misc/Loader.svelte';
+    import { onDestroy, onMount }   from "svelte";
+    import pageEvent                from "$lib/class/helpers/PageEvent.js";
+    import ConfirmAlert             from "$lib/components/alerts/AlertConfirm.svelte";
+    import Alert                    from "$lib/components/alerts/AlertMessage.svelte";
+    import Toast                    from "$lib/components/toast/Toast.svelte";
+    import { browser }              from "$app/environment";
+    import UrlController            from "$lib/class/helpers/Url.js";
+    import { goto }                 from "$app/navigation";
     //endregion
 
     //region export variables
