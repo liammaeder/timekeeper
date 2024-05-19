@@ -67,26 +67,39 @@
 </style>
 
 <div class="grid grid-cols-12">
-    <div class="col-span-2 text-gray-900 dark:text-white">
-        <button on:click={project.goBack}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-8 w-8">
-                <path fill="currentColor" d="M18 11v2h-8l3.5 3.5l-1.42 1.42L6.16 12l5.92-5.92L13.5 7.5L10 11zM2 12A10 10 0 0 1 12 2a10 10 0 0 1 10 10a10 10 0 0 1-10 10A10 10 0 0 1 2 12m2 0a8 8 0 0 0 8 8a8 8 0 0 0 8-8a8 8 0 0 0-8-8a8 8 0 0 0-8 8" />
-            </svg>
-        </button>
-    </div>
-
     {#if dataFetched}
         {#if noDataMatched}
+            <div class="col-span-2 text-gray-900 dark:text-white">
+                <button on:click={project.goBack}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-8 w-8">
+                        <path fill="currentColor" d="M18 11v2h-8l3.5 3.5l-1.42 1.42L6.16 12l5.92-5.92L13.5 7.5L10 11zM2 12A10 10 0 0 1 12 2a10 10 0 0 1 10 10a10 10 0 0 1-10 10A10 10 0 0 1 2 12m2 0a8 8 0 0 0 8 8a8 8 0 0 0 8-8a8 8 0 0 0-8-8a8 8 0 0 0-8 8" />
+                    </svg>
+                </button>
+            </div>
             <div class=" col-span-10text-gray-900 dark:text-white text-center">
                 No race information available...
             </div>
         {:else if !participantsFound}
+            <div class="col-span-2 text-gray-900 dark:text-white">
+                <button on:click={project.goBack}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-8 w-8">
+                        <path fill="currentColor" d="M18 11v2h-8l3.5 3.5l-1.42 1.42L6.16 12l5.92-5.92L13.5 7.5L10 11zM2 12A10 10 0 0 1 12 2a10 10 0 0 1 10 10a10 10 0 0 1-10 10A10 10 0 0 1 2 12m2 0a8 8 0 0 0 8 8a8 8 0 0 0 8-8a8 8 0 0 0-8-8a8 8 0 0 0-8 8" />
+                    </svg>
+                </button>
+            </div>
             <div class="col-span-10 text-gray-900 dark:text-white text-center">
                 No participants found linked to this race, please edit this race and add participants.
             </div>
         {:else}
             {#if raceState === "completed"}
-                <div class=" col-span-10 mx-auto p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <div class="col-span-2 text-gray-900 dark:text-white">
+                    <button on:click={project.goBack}>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-8 w-8">
+                            <path fill="currentColor" d="M18 11v2h-8l3.5 3.5l-1.42 1.42L6.16 12l5.92-5.92L13.5 7.5L10 11zM2 12A10 10 0 0 1 12 2a10 10 0 0 1 10 10a10 10 0 0 1-10 10A10 10 0 0 1 2 12m2 0a8 8 0 0 0 8 8a8 8 0 0 0 8-8a8 8 0 0 0-8-8a8 8 0 0 0-8 8" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="col-span-10 mx-auto p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <h5 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">{raceDetails.name}: {raceDetails.date}</h5>
                 </div>
                 <div class="col-span-12 relative overflow-x-auto mx-auto shadow-md sm:rounded-lg">
@@ -121,8 +134,15 @@
                 </div>
             {:else}
                 <div class="col-span-12 w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700 text-center">
-                    <h5 class="mb-4 text-2xl font-bold text-gray-900 dark:text-white">{raceDetails.name}: {raceDetails.date}</h5>
-                    {#if !isStarted}
+                    <div class="grid grid-cols-12 col-span-2 text-gray-900 dark:text-white">
+                        <button class="col-span-2 w-fit mx-2 mt-2 mb-4" on:click={project.goBack}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-8 w-8">
+                                <path fill="currentColor" d="M18 11v2h-8l3.5 3.5l-1.42 1.42L6.16 12l5.92-5.92L13.5 7.5L10 11zM2 12A10 10 0 0 1 12 2a10 10 0 0 1 10 10a10 10 0 0 1-10 10A10 10 0 0 1 2 12m2 0a8 8 0 0 0 8 8a8 8 0 0 0 8-8a8 8 0 0 0-8-8a8 8 0 0 0-8 8" />
+                            </svg>
+                        </button>
+                        <h5 class="col-span-10 max-w-full mb-4 my-auto text-2xl font-bold text-gray-900 dark:text-white">{raceDetails.name}: {raceDetails.date}</h5>
+                    </div>
+                   {#if !isStarted}
                         <button on:click={() => startAllWatches()} class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-lg px-5 py-2 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 w-full">
                             Start All
                         </button>
