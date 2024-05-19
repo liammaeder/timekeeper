@@ -31,6 +31,21 @@ export default class Racers{
         return result;
     }
 
+    async unlinkRacer() {
+        this.isSaving.set(true);
+        const url = apiRoute + "/unlinkRacer";
+        const jsonBody = {
+            "values": {
+                "racer": this.id,
+                "participant": this.participant
+            }
+        }
+
+        let result = await this.doFetch(url, jsonBody, "POST");
+        this.isSaving.set(false);
+        return result;
+    }
+
     async linkRacer() {
         this.isLinking.set(true);
         const url = apiRoute + "/linkRacer";

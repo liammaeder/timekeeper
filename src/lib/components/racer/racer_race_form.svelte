@@ -12,7 +12,7 @@
     export let participantId;
     export let raceId;
     export let racerNum;
-    export let racerList;
+    export let field;
     //endregion
 
     //region local variables
@@ -20,6 +20,7 @@
     let racer                   = new racerCls();
     let isNewRacer              = true;
     let racerCSA;
+    let racerList;
     //endregion
 
     //region subscriptions
@@ -39,7 +40,9 @@
     //endregion
 
     onMount(async () => {
-        pageEvent.addPageEvent('racer_selected', updateRacerList);
+        pageEvent.addPageEvent('racer_select', updateRacerList);
+        pageEvent.addPageEvent('racer_selected', racerLink);
+        pageEvent.addPageEvent('racer_created', racerCreate);
 
         try {
             racer.participant = participantId;
@@ -61,17 +64,19 @@
         } else {
             id = racer.id
         }
-        console.log(event);
-        console.log(racer.id);
-        console.log(id);
         racerList = racerList.filter(item => item.id !== id);
     }
 
     async function racerCreate(event) {
+        // if (event.prevRacer > 0) {
+        //     await racer.unlinkRacer()
+        // }
+
         racer = new racerCls();
         racer.participant = participantId;
-        racer.name = event.detail.racerName;
+        racer.name = event.name;
         racer.csa = racerCSA;
+
         let result = await racer.createRacer();
 
         if (result) {
@@ -83,28 +88,32 @@
     async function racerLink(event) {
         console.log(event);
         if (event) {
-            pageEvent.triggerEvent("racer_selected", event);
-            racer.id = event.detail.id;
+            pageEvent.triggerEvent("racer_select", event);
+            racer.id = event.newId;
         } else {
-            pageEvent.triggerEvent("racer_selected", {id: racer.id});
+            pageEvent.triggerEvent("racer_select", {id: racer.id});
         }
         await racer.linkRacer();
     }
 
     onDestroy(() => {
-        pageEvent.removePageEvent('racer_selected', updateRacerList);
+        pageEvent.removePageEvent('racer_select', updateRacerList);
+        pageEvent.removePageEvent('racer_selected', racerLink);
+        pageEvent.removePageEvent('racer_created', racerCreate);
     })
 </script>
 
-{#if dataFetched}
-    <form>
-        <div class="h-fit grid grid-cols-12 mt-2">
-            <h5 class="text-sm m-auto w-full col-span-12 md:col-span-2 lg:col-span-1  font-bold">Racer #{racerNum}</h5>
-            <div class="my-2 mx-auto w-full col-span-12 md:col-span-10 lg:col-span-11 group">
-                <SearchableDropdown listData={racerList} on:racerCreated={racerCreate} on:racerSelected={racerLink}/>
+<div>
+    {#if dataFetched}
+        <form>
+            <div class="h-fit grid grid-cols-12 mt-2">
+                <h5 class="text-sm m-auto w-full col-span-12 md:col-span-2 lg:col-span-1  font-bold">Racer #{racerNum}</h5>
+                <div class="my-2 mx-auto w-full col-span-12 md:col-span-10 lg:col-span-11 group">
+                    <SearchableDropdown field={field} listData={racerList} racerId={racer.id} />
+                </div>
             </div>
-        </div>
-    </form>
-{:else}
-    <Loader />
-{/if}
+        </form>
+    {:else}
+        <Loader />
+    {/if}
+</div>
